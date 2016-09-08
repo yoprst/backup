@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Prowl do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Prowl.new(model) }
@@ -54,7 +54,7 @@ describe Notifier::Prowl do
     }
     let(:form_data) {
       'application=my_app&apikey=my_api_key&'\
-      'event=Backup%3A%3ASTATUS&'\
+      'event=SlidayBackup%3A%3ASTATUS&'\
       'description=test+label+%28test_trigger%29'
     }
 

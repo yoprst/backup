@@ -8,9 +8,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 #   /vagrant/spec/live/.cache/
 # If you already have one, you can simply copy it there.
 # If not, change a test from :live to :focus and run it to generate one.
-module Backup
+module SlidayBackup
 describe Storage::Dropbox,
-    :if => BackupSpec::LIVE['storage']['dropbox']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['storage']['dropbox']['specs_enabled'] == true do
 
   # Note that the remote will only be cleaned after successful tests,
   # but it will clean files uploaded by all previous failed tests.
@@ -20,7 +20,7 @@ describe Storage::Dropbox,
     # With Splitter set to 2 MiB, package files will be 2,097,152 and 1,172,848.
     # With #chunk_size set to 1, the chunked uploader will upload 1 MiB per request.
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 2 # MiB
 
         archive :archive_a do |archive|
@@ -33,7 +33,7 @@ describe Storage::Dropbox,
           archive.add '~/test_data'
         end
 
-        config = BackupSpec::LIVE['storage']['dropbox']
+        config = SlidayBackupSpec::LIVE['storage']['dropbox']
         store_with Dropbox do |db|
           db.api_key     = config['api_key']
           db.api_secret  = config['api_secret']
@@ -98,7 +98,7 @@ describe Storage::Dropbox,
   end
 
   def remote_path_for(job)
-    path = BackupSpec::LIVE['storage']['dropbox']['path']
+    path = SlidayBackupSpec::LIVE['storage']['dropbox']['path']
     package = job.model.package
     File.join(path, package.trigger, package.time)
   end
@@ -115,7 +115,7 @@ describe Storage::Dropbox,
 
   def clean_remote(job)
     storage = job.model.storages.first
-    path = BackupSpec::LIVE['storage']['dropbox']['path']
+    path = SlidayBackupSpec::LIVE['storage']['dropbox']['path']
     storage.send(:connection).file_delete(path)
   end
 end

@@ -2,17 +2,17 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-describe Backup::Compressor::Base do
-  let(:compressor) { Backup::Compressor::Base.new }
+describe SlidayBackup::Compressor::Base do
+  let(:compressor) { SlidayBackup::Compressor::Base.new }
 
   it 'should include Utilities::Helpers' do
-    Backup::Compressor::Base.
-        include?(Backup::Utilities::Helpers).should be_true
+    SlidayBackup::Compressor::Base.
+        include?(SlidayBackup::Utilities::Helpers).should be_true
   end
 
   it 'should include Config::Helpers' do
-    Backup::Compressor::Base.
-        include?(Backup::Config::Helpers).should be_true
+    SlidayBackup::Compressor::Base.
+        include?(SlidayBackup::Config::Helpers).should be_true
   end
 
   describe '#compress_with' do
@@ -30,7 +30,7 @@ describe Backup::Compressor::Base do
   end
 
   describe '#compressor_name' do
-    it 'should return class name with Backup namespace removed' do
+    it 'should return class name with SlidayBackup namespace removed' do
       compressor.send(:compressor_name).should == 'Compressor::Base'
     end
   end
@@ -41,7 +41,7 @@ describe Backup::Compressor::Base do
       compressor.instance_variable_set(:@ext, 'compressor extension')
       compressor.expects(:compressor_name).returns('Compressor Name')
 
-      Backup::Logger.expects(:info).with(
+      SlidayBackup::Logger.expects(:info).with(
         "Using Compressor Name for compression.\n" +
         "  Command: 'compressor command'\n" +
         "  Ext: 'compressor extension'"

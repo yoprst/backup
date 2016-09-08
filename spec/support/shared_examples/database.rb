@@ -20,7 +20,7 @@ shared_examples 'a subclass of Database::Base' do
 
     it 'sets the dump_path' do
       expect( db.dump_path ).to eq(
-        File.join(Backup::Config.tmp_path, 'test_trigger', 'databases')
+        File.join(SlidayBackup::Config.tmp_path, 'test_trigger', 'databases')
       )
     end
 
@@ -41,14 +41,14 @@ shared_examples 'a subclass of Database::Base' do
     end
 
     it 'logs warning when model is created if database_id is needed' do
-      Backup::Logger.expects(:warn).with do |err|
+      SlidayBackup::Logger.expects(:warn).with do |err|
         expect( err ).
-            to be_an_instance_of Backup::Database::Error
+            to be_an_instance_of SlidayBackup::Database::Error
       end
 
       klass = described_class
       block = respond_to?(:required_config) ? required_config : Proc.new {}
-      Backup::Model.new(:test_model, 'test model') do
+      SlidayBackup::Model.new(:test_model, 'test model') do
         database klass, nil, &block
         database klass, :my_id, &block
       end
@@ -57,7 +57,7 @@ shared_examples 'a subclass of Database::Base' do
     it 'auto-generates a database_id if needed' do
       klass = described_class
       block = respond_to?(:required_config) ? required_config : Proc.new {}
-      test_model = Backup::Model.new(:test_model, 'test model') do
+      test_model = SlidayBackup::Model.new(:test_model, 'test model') do
         database klass, nil, &block
         database klass, :my_id, &block
       end
@@ -68,11 +68,11 @@ shared_examples 'a subclass of Database::Base' do
     end
 
     it 'does not warn or auto-generate database_id if only one class defined' do
-      Backup::Logger.expects(:warn).never
+      SlidayBackup::Logger.expects(:warn).never
 
       klass = described_class
       block = respond_to?(:required_config) ? required_config : Proc.new {}
-      test_model = Backup::Model.new(:test_model, 'test model') do
+      test_model = SlidayBackup::Model.new(:test_model, 'test model') do
         database klass, nil, &block
       end
       db = test_model.databases.first
@@ -82,24 +82,24 @@ shared_examples 'a subclass of Database::Base' do
   end # describe '#dump_filename'
 
   describe 'log!' do
-    let(:klass_name) { described_class.name.to_s.sub('Backup::', '') }
+    let(:klass_name) { described_class.name.to_s.sub('SlidayBackup::', '') }
 
     specify 'with a database_id' do
       block = respond_to?(:required_config) ? required_config : Proc.new {}
       db = described_class.new(model, :my_id, &block)
 
-      Backup::Logger.expects(:info).with("#{ klass_name } (my_id) Started...")
+      SlidayBackup::Logger.expects(:info).with("#{ klass_name } (my_id) Started...")
       db.send(:log!, :started)
 
-      Backup::Logger.expects(:info).with("#{ klass_name } (my_id) Finished!")
+      SlidayBackup::Logger.expects(:info).with("#{ klass_name } (my_id) Finished!")
       db.send(:log!, :finished)
     end
 
     specify 'without a database_id' do
-      Backup::Logger.expects(:info).with("#{ klass_name } Started...")
+      SlidayBackup::Logger.expects(:info).with("#{ klass_name } Started...")
       db.send(:log!, :started)
 
-      Backup::Logger.expects(:info).with("#{ klass_name } Finished!")
+      SlidayBackup::Logger.expects(:info).with("#{ klass_name } Finished!")
       db.send(:log!, :finished)
     end
   end # describe 'log!'

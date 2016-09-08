@@ -2,18 +2,18 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Database::Riak' do
 
   specify 'No Compression' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         database Riak
         store_with Local
       end
     EOS
 
-    # --tmp-path must be changed from the default ~/Backup/.tmp
+    # --tmp-path must be changed from the default ~/SlidayBackup/.tmp
     # due to permissions needed by riak-admin to perform the dump.
     job = backup_perform :my_backup, '--tmp-path=/tmp'
 
@@ -25,14 +25,14 @@ describe 'Database::Riak' do
 
   specify 'With Compression' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         database Riak
         store_with Local
         compress_with Gzip
       end
     EOS
 
-    # --tmp-path must be changed from the default ~/Backup/.tmp
+    # --tmp-path must be changed from the default ~/SlidayBackup/.tmp
     # due to permissions needed by riak-admin to perform the dump.
     job = backup_perform :my_backup, '--tmp-path=/tmp'
 

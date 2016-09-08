@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Slack do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Slack.new(model) }
@@ -77,7 +77,7 @@ describe Notifier::Slack do
     }
 
     let(:expected_titles_with_log) {
-      expected_titles += ["Detailed Backup Log"]
+      expected_titles += ["Detailed SlidayBackup Log"]
     }
 
     let(:notifier) {
@@ -93,7 +93,7 @@ describe Notifier::Slack do
     context 'when status is :success' do
       it 'sends a success message' do
         Excon.expects(:post).with() do |_url, options|
-          expected_excon_params(_url, options, {:text => "[Backup::Success] test label (test_trigger)"})
+          expected_excon_params(_url, options, {:text => "[SlidayBackup::Success] test label (test_trigger)"})
         end
 
         notifier.send(:notify!, :success)
@@ -103,7 +103,7 @@ describe Notifier::Slack do
     context 'when status is :warning' do
       it 'sends a warning message' do
         Excon.expects(:post).with() do |_url, options|
-          expected_excon_params(_url, options, {:text => "[Backup::Warning] test label (test_trigger)"}, true)
+          expected_excon_params(_url, options, {:text => "[SlidayBackup::Warning] test label (test_trigger)"}, true)
         end
 
         notifier.send(:notify!, :warning)
@@ -113,7 +113,7 @@ describe Notifier::Slack do
     context 'when status is :failure' do
       it 'sends a failure message' do
         Excon.expects(:post).with() do |_url, options|
-          expected_excon_params(_url, options, {:text => "[Backup::Failure] test label (test_trigger)"}, true)
+          expected_excon_params(_url, options, {:text => "[SlidayBackup::Failure] test label (test_trigger)"}, true)
         end
 
         notifier.send(:notify!, :failure)
@@ -133,7 +133,7 @@ describe Notifier::Slack do
       it 'sends message with optional parameters' do
         Excon.expects(:post).with() do |_url, options|
           expected_excon_params(_url, options, {
-            :text       => "[Backup::Success] test label (test_trigger)",
+            :text       => "[SlidayBackup::Success] test label (test_trigger)",
             :channel    => 'my_channel',
             :username   => 'my_username',
             :icon_emoji => ':vhs:'

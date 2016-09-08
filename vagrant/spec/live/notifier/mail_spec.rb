@@ -5,17 +5,17 @@ require File.expand_path('../../../spec_helper', __FILE__)
 # To run these tests, you need to setup your Mail credentials in
 #   /vagrant/spec/live.yml
 #
-module Backup
+module SlidayBackup
 describe Notifier::Mail,
-    :if => BackupSpec::LIVE['notifier']['mail']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['notifier']['mail']['specs_enabled'] == true do
 
   # These tests send actual emails. Check your mail to verify success.
   context 'when using :smtp delivery method' do
 
     it 'sends a success email', :live do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['notifier']['mail']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['notifier']['mail']
           notify_by Mail do |mail|
             mail.delivery_method      = :smtp
             mail.from                 = config['from']
@@ -36,8 +36,8 @@ describe Notifier::Mail,
 
     it 'sends a warning email', :live do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['notifier']['mail']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['notifier']['mail']
           notify_by Mail do |mail|
             mail.delivery_method      = :smtp
             mail.from                 = config['from']
@@ -52,7 +52,7 @@ describe Notifier::Mail,
           end
 
           # log a warning
-          Backup::Logger.warn 'test warning'
+          SlidayBackup::Logger.warn 'test warning'
         end
       EOS
 
@@ -61,8 +61,8 @@ describe Notifier::Mail,
 
     it 'sends a failure email (non-fatal)', :live do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['notifier']['mail']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['notifier']['mail']
           notify_by Mail do |mail|
             mail.delivery_method      = :smtp
             mail.from                 = config['from']
@@ -90,8 +90,8 @@ describe Notifier::Mail,
 
     it 'sends a failure email (fatal)', :live do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['notifier']['mail']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['notifier']['mail']
           notify_by Mail do |mail|
             mail.delivery_method      = :smtp
             mail.from                 = config['from']

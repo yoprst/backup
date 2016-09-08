@@ -2,32 +2,32 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-describe Backup::Encryptor::GPG do
+describe SlidayBackup::Encryptor::GPG do
   let(:encryptor) do
-    Backup::Encryptor::GPG.new do |e|
+    SlidayBackup::Encryptor::GPG.new do |e|
       e.mode = :symmetric
       e.passphrase = 'test secret'
     end
   end
 
   it 'should be a subclass of Encryptor::Base' do
-    Backup::Encryptor::GPG.
-      superclass.should == Backup::Encryptor::Base
+    SlidayBackup::Encryptor::GPG.
+      superclass.should == SlidayBackup::Encryptor::Base
   end
 
   it 'supports three modes of operation' do
-    Backup::Encryptor::GPG::MODES.should == [:asymmetric, :symmetric, :both]
+    SlidayBackup::Encryptor::GPG::MODES.should == [:asymmetric, :symmetric, :both]
   end
 
   describe '#mode=' do
     it 'should accept valid modes' do
-      mode = Backup::Encryptor::GPG::MODES.shuffle.first
+      mode = SlidayBackup::Encryptor::GPG::MODES.shuffle.first
       encryptor.mode = mode
       encryptor.mode.should == mode
     end
 
     it 'should convert string input to a symbol' do
-      mode = Backup::Encryptor::GPG::MODES.shuffle.first
+      mode = SlidayBackup::Encryptor::GPG::MODES.shuffle.first
       encryptor.mode = mode.to_s
       encryptor.mode.should == mode
     end
@@ -35,15 +35,15 @@ describe Backup::Encryptor::GPG do
     it 'should raise an error for invalid modes' do
       expect do
         encryptor.mode = 'foo'
-      end.to raise_error(Backup::Encryptor::GPG::Error)
+      end.to raise_error(SlidayBackup::Encryptor::GPG::Error)
     end
   end # describe '#mode='
 
   describe '#initialize' do
-    after { Backup::Encryptor::GPG.clear_defaults! }
+    after { SlidayBackup::Encryptor::GPG.clear_defaults! }
 
     it 'should load pre-configured defaults' do
-      Backup::Encryptor::GPG.any_instance.expects(:load_defaults!)
+      SlidayBackup::Encryptor::GPG.any_instance.expects(:load_defaults!)
       encryptor
     end
 
@@ -54,7 +54,7 @@ describe Backup::Encryptor::GPG do
       end
 
       it 'should use default values if none are given' do
-        encryptor = Backup::Encryptor::GPG.new
+        encryptor = SlidayBackup::Encryptor::GPG.new
         encryptor.mode.should == :asymmetric
         encryptor.keys.should be_nil
         encryptor.recipients.should be_nil
@@ -67,7 +67,7 @@ describe Backup::Encryptor::GPG do
 
     context 'when pre-configured defaults have been set' do
       before do
-        Backup::Encryptor::GPG.defaults do |e|
+        SlidayBackup::Encryptor::GPG.defaults do |e|
           e.mode = :both
           e.keys = { 'test_key' => 'test public key' }
           e.recipients = 'test_key'
@@ -76,7 +76,7 @@ describe Backup::Encryptor::GPG do
       end
 
       it 'should use pre-configured defaults' do
-        encryptor = Backup::Encryptor::GPG.new
+        encryptor = SlidayBackup::Encryptor::GPG.new
         encryptor.mode.should == :both
         encryptor.keys.should == { 'test_key' => 'test public key' }
         encryptor.recipients.should == 'test_key'
@@ -119,7 +119,7 @@ describe Backup::Encryptor::GPG do
 
         expect do
           encryptor.encrypt_with
-        end.to raise_error(Backup::Encryptor::GPG::Error)
+        end.to raise_error(SlidayBackup::Encryptor::GPG::Error)
       end
     end
   end # describe '#encrypt_with'
@@ -221,7 +221,7 @@ describe Backup::Encryptor::GPG do
 
       before do
         encryptor.gpg_homedir = path
-        Backup::Config.stubs(:user).returns('a_user')
+        SlidayBackup::Config.stubs(:user).returns('a_user')
       end
 
       context 'and no errors occur' do
@@ -269,7 +269,7 @@ describe Backup::Encryptor::GPG do
             encryptor.send(:setup_gpg_homedir)
           end.to raise_error {|err|
             err.should
-              be_an_instance_of Backup::Encryptor::GPG::Error
+              be_an_instance_of SlidayBackup::Encryptor::GPG::Error
             err.message.should match('Failed to create or set permissions')
             err.message.should match('RuntimeError: error message')
           }
@@ -294,7 +294,7 @@ describe Backup::Encryptor::GPG do
 
           \tthe content of a gpg.conf file
         EOF
-        Backup::Config.stubs(:tmp_path).returns('/Backup/tmp')
+        SlidayBackup::Config.stubs(:tmp_path).returns('/SlidayBackup/tmp')
         encryptor.instance_variable_set(:@tempdirs, [])
       end
 
@@ -312,7 +312,7 @@ describe Backup::Encryptor::GPG do
         it 'should create and return the file path' do
           # create temporary directory and convert to a Pathname object
           Dir.expects(:mktmpdir).with(
-            'backup-gpg_config', '/Backup/tmp'
+            'backup-gpg_config', '/SlidayBackup/tmp'
           ).returns(tempdir)
 
           # create temporary file within the temporary directory
@@ -352,7 +352,7 @@ describe Backup::Encryptor::GPG do
           expect do
             encryptor.send(:setup_gpg_config)
           end.to raise_error {|err|
-            err.should be_an_instance_of(Backup::Encryptor::GPG::Error)
+            err.should be_an_instance_of(SlidayBackup::Encryptor::GPG::Error)
             err.message.should match('Error creating temporary file for #gpg_config')
             err.message.should match('RuntimeError: an error')
           }
@@ -460,7 +460,7 @@ describe Backup::Encryptor::GPG do
       context 'and no :passphrase_file is set' do
         it 'should return nil and log a warning' do
           encryptor.expects(:passphrase_file).returns(nil)
-          Backup::Logger.expects(:warn)
+          SlidayBackup::Logger.expects(:warn)
 
           encryptor.send(:symmetric_options).should be_nil
         end
@@ -482,7 +482,7 @@ describe Backup::Encryptor::GPG do
         context 'when :passphrase_file is no valid' do
           it 'should return nil and log a warning' do
             File.expects(:exist?).with(path).returns(false)
-            Backup::Logger.expects(:warn)
+            SlidayBackup::Logger.expects(:warn)
             encryptor.send(:symmetric_options).should be_nil
           end
         end
@@ -505,7 +505,7 @@ describe Backup::Encryptor::GPG do
 
       before do
         encryptor.instance_variable_set(:@tempdirs, [])
-        Backup::Config.stubs(:tmp_path).returns('/Backup/tmp')
+        SlidayBackup::Config.stubs(:tmp_path).returns('/SlidayBackup/tmp')
         encryptor.stubs(:passphrase).returns('a secret')
         tempfile.stubs(:path).returns(tempfile_path)
       end
@@ -514,7 +514,7 @@ describe Backup::Encryptor::GPG do
         it 'should return the path for the temp file' do
           # creates temporary directory in Config.tmp_path
           Dir.expects(:mktmpdir).
-              with('backup-gpg_passphrase', '/Backup/tmp').
+              with('backup-gpg_passphrase', '/SlidayBackup/tmp').
               returns(tempdir)
 
           # create the temporary file in that temporary directory
@@ -534,8 +534,8 @@ describe Backup::Encryptor::GPG do
       context 'and an error occurs' do
         it 'should return false and log a warning' do
           Dir.expects(:mktmpdir).raises('an error')
-          Backup::Logger.expects(:warn).with do |err|
-            err.should be_an_instance_of(Backup::Encryptor::GPG::Error)
+          SlidayBackup::Logger.expects(:warn).with do |err|
+            err.should be_an_instance_of(SlidayBackup::Encryptor::GPG::Error)
             err.message.should match('Error creating temporary passphrase file')
             err.message.should match('RuntimeError: an error')
           end
@@ -558,7 +558,7 @@ describe Backup::Encryptor::GPG do
     context 'when no recipients are found' do
       it 'should return nil log a warning' do
         encryptor.expects(:user_recipients).returns([])
-        Backup::Logger.expects(:warn)
+        SlidayBackup::Logger.expects(:warn)
         encryptor.send(:asymmetric_options).should be_nil
       end
     end
@@ -586,7 +586,7 @@ describe Backup::Encryptor::GPG do
 
         # key_id4 will not be found in user_keys, so a warning will be logged.
         # This will return nil into the array, which will be compacted out.
-        Backup::Logger.expects(:warn).with do |msg|
+        SlidayBackup::Logger.expects(:warn).with do |msg|
           msg.should match(/'key_id4'/)
         end
 
@@ -632,7 +632,7 @@ describe Backup::Encryptor::GPG do
         encryptor.expects(:clean_identifier).with('key2').returns('clean_key2')
         encryptor.expects(:clean_identifier).with('key3').returns('clean_key3')
 
-        Backup::Logger.expects(:warn).never
+        SlidayBackup::Logger.expects(:warn).never
 
         cleaned_hash = {
           'clean_key1' => :foo, 'clean_key2' => :foo, 'clean_key3' => :foo
@@ -649,7 +649,7 @@ describe Backup::Encryptor::GPG do
         # return a duplicate key
         encryptor.expects(:clean_identifier).with('key3').returns('clean_key2')
 
-        Backup::Logger.expects(:warn)
+        SlidayBackup::Logger.expects(:warn)
 
         cleaned_hash = {
           'clean_key1' => :foo, 'clean_key2' => :foo
@@ -705,7 +705,7 @@ describe Backup::Encryptor::GPG do
         gpg: keyring `/tmp/.gnupg/secring.gpg' created
         gpg: keyring `/tmp/.gnupg/pubring.gpg' created
         gpg: /tmp/.gnupg/trustdb.gpg: trustdb created
-        gpg: key 0x9D666290C5F7EE0F: public key "Backup Test <backup01@foo.com>" imported
+        gpg: key 0x9D666290C5F7EE0F: public key "SlidayBackup Test <backup01@foo.com>" imported
         gpg: Total number processed: 1
         gpg:               imported: 1  (RSA: 1)
       EOS
@@ -731,7 +731,7 @@ describe Backup::Encryptor::GPG do
     let(:tempfile) { mock }
 
     before do
-      Backup::Config.stubs(:tmp_path).returns('/tmp/path')
+      SlidayBackup::Config.stubs(:tmp_path).returns('/tmp/path')
       encryptor.stubs(:base_options).returns("--some 'base options'")
       encryptor.stubs(:utility).returns('gpg')
       tempfile.stubs(:path).returns('/tmp/file/path')
@@ -762,7 +762,7 @@ gXY+pNqaEE6cHrg+uQatVQITX8EoVJhQ9Z1mYJB+g62zqOQPe10Spb381O9y4dN/
 
         tempfile.expects(:delete)
 
-        Backup::Logger.expects(:warn).never
+        SlidayBackup::Logger.expects(:warn).never
 
         encryptor.send(:import_key, 'some_identifier', gpg_key).
             should == '9D666290C5F7EE0F'
@@ -772,8 +772,8 @@ gXY+pNqaEE6cHrg+uQatVQITX8EoVJhQ9Z1mYJB+g62zqOQPe10Spb381O9y4dN/
     context 'when the import is unsuccessful' do
       it 'should return nil and log a warning' do
         Tempfile.expects(:open).raises('an error')
-        Backup::Logger.expects(:warn).with {|err|
-          err.should be_an_instance_of(Backup::Encryptor::GPG::Error)
+        SlidayBackup::Logger.expects(:warn).with {|err|
+          err.should be_an_instance_of(SlidayBackup::Encryptor::GPG::Error)
           err.message.should match("Public key import failed for 'some_identifier'")
           err.message.should match('RuntimeError: an error')
         }
@@ -789,50 +789,50 @@ gXY+pNqaEE6cHrg+uQatVQITX8EoVJhQ9Z1mYJB+g62zqOQPe10Spb381O9y4dN/
         tru::1:1343402941:0:3:1:5
         pub:-:1024:1:5EFD157FFF9CFEA6:1342808803:::-:::scESC:
         fpr:::::::::72E56E48E362BB402B3344045EFD157FFF9CFEA6:
-        uid:-::::1342808803::3BED8A0A5100FE9028BEB53610247518594B60A8::Backup Test (No Email):
+        uid:-::::1342808803::3BED8A0A5100FE9028BEB53610247518594B60A8::SlidayBackup Test (No Email):
         sub:-:1024:1:E6CF1DC860A82E07:1342808803::::::e:
         pub:-:1024:1:570CE9221E3DA3E8:1342808841:::-:::scESC:
         fpr:::::::::616BBC8409C1AED791F8E6F8570CE9221E3DA3E8:
-        uid:-::::1342808875::ECFF419EFE4BD3C7CBCCD58FACAD283A9E98FECD::Backup Test <backup04@foo.com>:
-        uid:-::::1342808841::DDFD072C193BB45587EBA9D19A7DA1BB0E5E8A22::Backup Test <backup03@foo.com>:
+        uid:-::::1342808875::ECFF419EFE4BD3C7CBCCD58FACAD283A9E98FECD::SlidayBackup Test <backup04@foo.com>:
+        uid:-::::1342808841::DDFD072C193BB45587EBA9D19A7DA1BB0E5E8A22::SlidayBackup Test <backup03@foo.com>:
         sub:-:1024:1:B65C0ADEB804268D:1342808841::::::e:
         pub:-:1024:1:54F81C93A7641A16:1342809011:::-:::scESC:
         fpr:::::::::71335B9B960CF3A3071535F454F81C93A7641A16:
-        uid:-::::1342809011::2E5801E9C064C2A165B61EE35D50A5F9B64BF345::Backup Test (other email is <backup06@foo.com>) <backup05@foo.com>:
+        uid:-::::1342809011::2E5801E9C064C2A165B61EE35D50A5F9B64BF345::SlidayBackup Test (other email is <backup06@foo.com>) <backup05@foo.com>:
         sub:-:1024:1:5B57BC34628252C7:1342809011::::::e:
         pub:-:1024:1:0A5B6CC9581A88CF:1342809049:::-:::scESC:
         fpr:::::::::E8C459082544924B8AEA06280A5B6CC9581A88CF:
-        uid:-::::1342809470::4A404F9ED6780E7E0E02A7F7607828E648789058::Backup Test <backup08@foo.com>:
-        uid:-::::::9785ADEBBBCE94CE0FF25774F610F2B11C839E9B::Backup Test <backup07@foo.com>:
-        uid:r::::::4AD074B1857819EFA105DFB6C464600AA451BF18::Backup Test <backup09@foo.com>:
+        uid:-::::1342809470::4A404F9ED6780E7E0E02A7F7607828E648789058::SlidayBackup Test <backup08@foo.com>:
+        uid:-::::::9785ADEBBBCE94CE0FF25774F610F2B11C839E9B::SlidayBackup Test <backup07@foo.com>:
+        uid:r::::::4AD074B1857819EFA105DFB6C464600AA451BF18::SlidayBackup Test <backup09@foo.com>:
         sub:e:1024:1:60A420E39B979B06:1342809049:1342895611:::::e:
         sub:-:1024:1:A05786E7AD5B8352:1342809166::::::e:
         pub:i:1024:1:4A83569F4E5E8D8A:1342810132:::-:::esca:
         fpr:::::::::FFEAD1DB201FB214873E73994A83569F4E5E8D8A:
-        uid:-::::::3D41A10AF2437C8C5BF6050FA80FE20CE30769BF::Backup Test <backup10@foo.com>:
+        uid:-::::::3D41A10AF2437C8C5BF6050FA80FE20CE30769BF::SlidayBackup Test <backup10@foo.com>:
         sub:i:1024:1:662F18DB92C8DFD8:1342810132::::::e:
         pub:r:1024:1:15ECEF9ECA136FFF:1342810387:::-:::sc:
         fpr:::::::::3D1CBF3FEFCE5ABB728922F615ECEF9ECA136FFF:
-        uid:r::::1342810387::296434E1662AE0B2FF8E93EC3BF3AFE24514D0E0::Backup Test <backup11@foo.com>:
+        uid:r::::1342810387::296434E1662AE0B2FF8E93EC3BF3AFE24514D0E0::SlidayBackup Test <backup11@foo.com>:
         sub:r:1024:1:097A79EB1F7D4619:1342810387::::::e:
         sub:r:1024:1:39093E8E9057625E:1342810404::::::e:
         pub:e:1024:1:31920687A8A7941B:1342810629:1342897029::-:::sc:
         fpr:::::::::03B399CBC2F4B61019D14BCD31920687A8A7941B:
-        uid:e::::1342810629::ED8151565B25281CB92DD1E534701E660126CB0C::Backup Test <backup12@foo.com>:
+        uid:e::::1342810629::ED8151565B25281CB92DD1E534701E660126CB0C::SlidayBackup Test <backup12@foo.com>:
         sub:e:1024:1:AEF89BEE95042A0F:1342810629:1342897029:::::e:
         pub:-:1024:1:E3DBAEC3FEEA03E2:1342810728:::-:::scSC:
         fpr:::::::::444B0870D985CF70BBB7F4DCE3DBAEC3FEEA03E2:
-        uid:-::::1342810796::4D1B8CC29335BF79232CA71210F75CF80318B06A::Backup Test <backup13@foo.com>:
-        uid:-::::1342810728::F1422363E8DC1EC3076906505CE66855BB44CAB7::Backup Test <backup14@foo.com>:
+        uid:-::::1342810796::4D1B8CC29335BF79232CA71210F75CF80318B06A::SlidayBackup Test <backup13@foo.com>:
+        uid:-::::1342810728::F1422363E8DC1EC3076906505CE66855BB44CAB7::SlidayBackup Test <backup14@foo.com>:
         sub:e:1024:1:C95DED316504D17C:1342810728:1342897218:::::e:
         pub:u:1024:1:027B83DB8A82B9CB:1343402840:::u:::scESC:
         fpr:::::::::A20D90150CE4E5F851AD3A9D027B83DB8A82B9CB:
-        uid:u::::1343402840::307F1E025E8BEB7DABCADC353291184AD493A28E::Backup Test <backup01@foo.com>:
+        uid:u::::1343402840::307F1E025E8BEB7DABCADC353291184AD493A28E::SlidayBackup Test <backup01@foo.com>:
         sub:u:1024:1:EF31D36414FD8B2B:1343402840::::::e:
         pub:u:1024:1:4CEA6442A4A57A76:1343402867:::u:::scESC:
         fpr:::::::::5742EAFB4CF38014B474671E4CEA6442A4A57A76:
-        uid:u::::1343402932::C220D9FF5C9652AA31D3CE0487D88EFF291FA1ED::Backup Test:
-        uid:u::::1343402922::E89778553F703C26517AD8321C17C81F3213A782::Backup Test <backup02@foo.com>:
+        uid:u::::1343402932::C220D9FF5C9652AA31D3CE0487D88EFF291FA1ED::SlidayBackup Test:
+        uid:u::::1343402922::E89778553F703C26517AD8321C17C81F3213A782::SlidayBackup Test <backup02@foo.com>:
         sub:u:1024:1:140DDC2E97DA3567:1343402867::::::e:
       EOS
     }

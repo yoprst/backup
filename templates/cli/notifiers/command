@@ -28,5 +28,5 @@
     #
     # Defaults to ["%L %v"]
     #
-    # cmd.args = ["Backup %L", "%V"]
+    # cmd.args = ["SlidayBackup %L", "%V"]
   end

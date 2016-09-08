@@ -10,9 +10,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 #
 # Note: The S3 Bucket you use should have read-after-write consistency.
 #       So don't use the US Standard region.
-module Backup
+module SlidayBackup
 describe Storage::S3,
-    :if => BackupSpec::LIVE['storage']['s3']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['storage']['s3']['specs_enabled'] == true do
 
   before { clean_remote }
   after  { clean_remote }
@@ -24,7 +24,7 @@ describe Storage::S3,
 
   it 'stores package', :live do
     create_model :my_backup, %q{
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 6 # MiB
 
         6.times do |n|
@@ -33,7 +33,7 @@ describe Storage::S3,
           end
         end
 
-        config = BackupSpec::LIVE['storage']['s3']
+        config = SlidayBackupSpec::LIVE['storage']['s3']
         store_with S3 do |s3|
           s3.access_key_id      = config['access_key_id']
           s3.secret_access_key  = config['secret_access_key']
@@ -65,7 +65,7 @@ describe Storage::S3,
 
   it 'uses server-side encryption and reduced redundancy', :live do
     create_model :my_backup, %q{
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 6 # MiB
 
         6.times do |n|
@@ -74,7 +74,7 @@ describe Storage::S3,
           end
         end
 
-        config = BackupSpec::LIVE['storage']['s3']
+        config = SlidayBackupSpec::LIVE['storage']['s3']
         store_with S3 do |s3|
           s3.access_key_id      = config['access_key_id']
           s3.secret_access_key  = config['secret_access_key']
@@ -108,7 +108,7 @@ describe Storage::S3,
 
   it 'cycles stored packages', :live do
     create_model :my_backup, %q{
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 6 # MiB
 
         6.times do |n|
@@ -117,7 +117,7 @@ describe Storage::S3,
           end
         end
 
-        config = BackupSpec::LIVE['storage']['s3']
+        config = SlidayBackupSpec::LIVE['storage']['s3']
         store_with S3 do |s3|
           s3.access_key_id      = config['access_key_id']
           s3.secret_access_key  = config['secret_access_key']
@@ -163,7 +163,7 @@ describe Storage::S3,
   private
 
   def cloud_io
-    config = BackupSpec::LIVE['storage']['s3']
+    config = SlidayBackupSpec::LIVE['storage']['s3']
     @cloud_io ||= CloudIO::S3.new(
       :access_key_id      => config['access_key_id'],
       :secret_access_key  => config['secret_access_key'],
@@ -183,7 +183,7 @@ describe Storage::S3,
   end
 
   def remote_path_for(job)
-    path = BackupSpec::LIVE['storage']['s3']['path']
+    path = SlidayBackupSpec::LIVE['storage']['s3']['path']
     package = job.model.package
     File.join(path, package.trigger, package.time)
   end
@@ -195,7 +195,7 @@ describe Storage::S3,
   end
 
   def clean_remote
-    path = BackupSpec::LIVE['storage']['s3']['path']
+    path = SlidayBackupSpec::LIVE['storage']['s3']['path']
     objects = cloud_io.objects(path)
     cloud_io.delete(objects) unless objects.empty?
   end

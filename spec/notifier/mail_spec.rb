@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Mail do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Mail.new(model) }
@@ -101,7 +101,7 @@ describe Notifier::Mail do
   end # describe '#initialize'
 
   describe '#notify!' do
-    let(:message) { '[Backup::%s] test label (test_trigger)' }
+    let(:message) { '[SlidayBackup::%s] test label (test_trigger)' }
 
     before do
       notifier.delivery_method = :test
@@ -138,7 +138,7 @@ describe Notifier::Mail do
           expect( sent_message.text_part ).to be_an_instance_of ::Mail::Part
           expect( sent_message.text_part.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Completed Successfully!
+            SlidayBackup Completed Successfully!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -148,7 +148,7 @@ describe Notifier::Mail do
             See the attached backup log for details.
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup
@@ -169,7 +169,7 @@ describe Notifier::Mail do
           expect( sent_message.body ).to be_an_instance_of ::Mail::Body
           expect( sent_message.body.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Completed Successfully!
+            SlidayBackup Completed Successfully!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -177,7 +177,7 @@ describe Notifier::Mail do
             Duration: 00:00:05
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup
@@ -203,7 +203,7 @@ describe Notifier::Mail do
           expect( sent_message.text_part ).to be_an_instance_of ::Mail::Part
           expect( sent_message.text_part.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Completed Successfully (with Warnings)!
+            SlidayBackup Completed Successfully (with Warnings)!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -213,7 +213,7 @@ describe Notifier::Mail do
             See the attached backup log for details.
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup
@@ -236,7 +236,7 @@ describe Notifier::Mail do
           expect( sent_message.body ).to be_an_instance_of ::Mail::Body
           expect( sent_message.body.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Completed Successfully (with Warnings)!
+            SlidayBackup Completed Successfully (with Warnings)!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -244,7 +244,7 @@ describe Notifier::Mail do
             Duration: 00:00:05
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup
@@ -270,7 +270,7 @@ describe Notifier::Mail do
           expect( sent_message.text_part ).to be_an_instance_of ::Mail::Part
           expect( sent_message.text_part.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Failed!
+            SlidayBackup Failed!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -280,7 +280,7 @@ describe Notifier::Mail do
             See the attached backup log for details.
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup
@@ -303,7 +303,7 @@ describe Notifier::Mail do
           expect( sent_message.body ).to be_an_instance_of ::Mail::Body
           expect( sent_message.body.decoded ).to eq <<-EOS.gsub(/^ +/, '')
 
-            Backup Failed!
+            SlidayBackup Failed!
 
             Job: test label (test_trigger)
             Started:  #{ model.started_at }
@@ -311,7 +311,7 @@ describe Notifier::Mail do
             Duration: 00:00:05
 
             #{ '=' * 75 }
-            Backup v#{ VERSION }
+            SlidayBackup v#{ VERSION }
             Ruby: #{ RUBY_DESCRIPTION }
 
             Project Home:  https://github.com/backup/backup

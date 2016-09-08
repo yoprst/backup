@@ -2,7 +2,7 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Cleaner do
   let(:model) { Model.new(:test_trigger, 'test label') }
 
@@ -143,7 +143,7 @@ describe Cleaner do
   describe '#remove_package' do
     it 'removes the package files' do
       package = stub(:filenames => ['file1', 'file2'])
-      Backup::Logger.expects(:info).with("Cleaning up the package files...")
+      SlidayBackup::Logger.expects(:info).with("Cleaning up the package files...")
       FileUtils.expects(:rm_f).with(
         File.join(Config.tmp_path, 'file1')
       )

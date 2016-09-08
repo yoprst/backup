@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
   describe Notifier::FlowDock do
     let(:model) { Model.new(:test_trigger, 'test label') }
     let(:notifier) { Notifier::FlowDock.new(model) }
@@ -16,8 +16,8 @@ module Backup
         expect( notifier.token          ).to be_nil
         expect( notifier.from_name      ).to be_nil
         expect( notifier.from_email     ).to be_nil
-        expect( notifier.subject        ).to eql 'Backup Notification'
-        expect( notifier.source         ).to  eql 'Backup test label'
+        expect( notifier.subject        ).to eql 'SlidayBackup Notification'
+        expect( notifier.source         ).to  eql 'SlidayBackup test label'
 
         expect( notifier.on_success     ).to be(true)
         expect( notifier.on_warning     ).to be(true)
@@ -31,7 +31,7 @@ module Backup
           flowdock.token           = 'my_token'
           flowdock.from_name       = 'my_name'
           flowdock.from_email      = 'email@example.com'
-          flowdock.subject         = 'My Daily Backup'
+          flowdock.subject         = 'My Daily SlidayBackup'
 
           flowdock.on_success    = false
           flowdock.on_warning    = false
@@ -43,7 +43,7 @@ module Backup
         expect( notifier.token          ).to eq 'my_token'
         expect( notifier.from_name           ).to eq 'my_name'
         expect( notifier.from_email ).to eq 'email@example.com'
-        expect( notifier.subject ).to eq 'My Daily Backup'
+        expect( notifier.subject ).to eq 'My Daily SlidayBackup'
 
         expect( notifier.on_success     ).to be(false)
         expect( notifier.on_warning     ).to be(false)
@@ -59,25 +59,25 @@ module Backup
           flowdock.token           = 'my_token'
           flowdock.from_name       = 'my_name'
           flowdock.from_email      = 'email@example.com'
-          flowdock.subject         = 'My Daily Backup'
+          flowdock.subject         = 'My Daily SlidayBackup'
           flowdock.tags            = ['prod']
           flowdock.link            = 'www.example.com'
         end
       }
       let(:client) { mock }
       let(:push_to_team_inbox) { mock }
-      let(:message) { '[Backup::%s] test label (test_trigger)' }
+      let(:message) { '[SlidayBackup::%s] test label (test_trigger)' }
 
       context 'when status is :success' do
         it 'sends a success message' do
           Flowdock::Flow.expects(:new).in_sequence(s).
-              with(:api_token => 'my_token', :source => 'Backup test label',
+              with(:api_token => 'my_token', :source => 'SlidayBackup test label',
                     :from => {:name => 'my_name', :address => 'email@example.com'}
                     ).returns(client)
           client.expects(:push_to_team_inbox).in_sequence(s).
-              with(:subject => 'My Daily Backup',
+              with(:subject => 'My Daily SlidayBackup',
                    :content => message % 'Success',
-                   :tags => [ 'prod', '#BackupSuccess' ],
+                   :tags => [ 'prod', '#SlidayBackupSuccess' ],
                    :link => 'www.example.com' )
 
           notifier.send(:notify!, :success)
@@ -87,13 +87,13 @@ module Backup
       context 'when status is :warning' do
         it 'sends a warning message' do
           Flowdock::Flow.expects(:new).in_sequence(s).
-              with(:api_token => 'my_token', :source => 'Backup test label',
+              with(:api_token => 'my_token', :source => 'SlidayBackup test label',
                     :from => {:name => 'my_name', :address => 'email@example.com'}
                     ).returns(client)
           client.expects(:push_to_team_inbox).in_sequence(s).
-              with(:subject => 'My Daily Backup',
+              with(:subject => 'My Daily SlidayBackup',
                    :content => message % 'Warning',
-                   :tags => [ 'prod', '#BackupWarning' ],
+                   :tags => [ 'prod', '#SlidayBackupWarning' ],
                    :link => 'www.example.com' )
 
           notifier.send(:notify!, :warning)
@@ -103,13 +103,13 @@ module Backup
       context 'when status is :failure' do
         it 'sends a failure message' do
           Flowdock::Flow.expects(:new).in_sequence(s).
-              with(:api_token => 'my_token', :source => 'Backup test label',
+              with(:api_token => 'my_token', :source => 'SlidayBackup test label',
                     :from => {:name => 'my_name', :address => 'email@example.com'}
                     ).returns(client)
           client.expects(:push_to_team_inbox).in_sequence(s).
-              with(:subject => 'My Daily Backup',
+              with(:subject => 'My Daily SlidayBackup',
                    :content => message % 'Failure',
-                   :tags => [ 'prod', '#BackupFailure' ],
+                   :tags => [ 'prod', '#SlidayBackupFailure' ],
                    :link => 'www.example.com' )
 
           notifier.send(:notify!, :failure)

@@ -10,9 +10,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 #
 # Note: The S3 Bucket you use should have read-after-write consistency.
 #       So don't use the US Standard region.
-module Backup
+module SlidayBackup
 describe Syncer::Cloud::S3,
-    :if => BackupSpec::LIVE['syncer']['cloud']['s3']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['syncer']['cloud']['s3']['specs_enabled'] == true do
 
   before { prepare_local_sync_files; clean_remote }
   after  { clean_remote }
@@ -21,8 +21,8 @@ describe Syncer::Cloud::S3,
 
     it 'works' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['syncer']['cloud']['s3']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['syncer']['cloud']['s3']
           sync_with Cloud::S3 do |s3|
             s3.access_key_id      = config['access_key_id']
             s3.secret_access_key  = config['secret_access_key']
@@ -33,8 +33,8 @@ describe Syncer::Cloud::S3,
             s3.mirror             = #{ mirror }
 
             s3.directories do
-              add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_a')
-              add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_b')
+              add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_a')
+              add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_b')
             end
           end
         end
@@ -104,8 +104,8 @@ describe Syncer::Cloud::S3,
 
   it 'uses :storage_class and :encryption', :live do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
-        config = BackupSpec::LIVE['syncer']['cloud']['s3']
+      SlidayBackup::Model.new(:my_backup, 'a description') do
+        config = SlidayBackupSpec::LIVE['syncer']['cloud']['s3']
         sync_with Cloud::S3 do |s3|
           s3.access_key_id      = config['access_key_id']
           s3.secret_access_key  = config['secret_access_key']
@@ -116,8 +116,8 @@ describe Syncer::Cloud::S3,
           s3.encryption         = :aes256
 
           s3.directories do
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_a')
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_b')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_a')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_b')
           end
         end
       end
@@ -137,8 +137,8 @@ describe Syncer::Cloud::S3,
 
   it 'excludes files', :live do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
-        config = BackupSpec::LIVE['syncer']['cloud']['s3']
+      SlidayBackup::Model.new(:my_backup, 'a description') do
+        config = SlidayBackupSpec::LIVE['syncer']['cloud']['s3']
         sync_with Cloud::S3 do |s3|
           s3.access_key_id      = config['access_key_id']
           s3.secret_access_key  = config['secret_access_key']
@@ -147,8 +147,8 @@ describe Syncer::Cloud::S3,
           s3.path               = config['path']
 
           s3.directories do
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_a')
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_b')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_a')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_b')
             exclude '**/two.*'
             exclude /three\.file$/
           end
@@ -168,7 +168,7 @@ describe Syncer::Cloud::S3,
   private
 
   def cloud_io
-    config = BackupSpec::LIVE['syncer']['cloud']['s3']
+    config = SlidayBackupSpec::LIVE['syncer']['cloud']['s3']
     @cloud_io ||= CloudIO::S3.new(
       :access_key_id      => config['access_key_id'],
       :secret_access_key  => config['secret_access_key'],
@@ -182,7 +182,7 @@ describe Syncer::Cloud::S3,
   end
 
   def remote_path
-    BackupSpec::LIVE['syncer']['cloud']['s3']['path']
+    SlidayBackupSpec::LIVE['syncer']['cloud']['s3']['path']
   end
 
   def objects_on_remote
@@ -211,7 +211,7 @@ describe Syncer::Cloud::S3,
 
   def skipped_file_logged?(job)
     messages = job.logger.messages.map {|m| m.formatted_lines }.flatten
-    file = File.join(BackupSpec::LOCAL_SYNC_PATH, "dir_b/bad\uFFFDfile")
+    file = File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, "dir_b/bad\uFFFDfile")
     messages.any? {|line| line.include? "[warn]   [skipping] #{ file }" }
   end
 

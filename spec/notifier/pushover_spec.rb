@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Pushover do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Pushover.new(model) }
@@ -63,7 +63,7 @@ describe Notifier::Pushover do
     }
     let(:form_data) {
       'user=my_user&token=my_token&' +
-      'message=%5BBackup%3A%3A' + 'STATUS' + '%5D+test+label+%28test_trigger%29'
+      'message=%5BSlidayBackup%3A%3A' + 'STATUS' + '%5D+test+label+%28test_trigger%29'
     }
 
     context 'when status is :success' do
@@ -123,7 +123,7 @@ describe Notifier::Pushover do
       }
       let(:form_data) {
         'user=my_user&token=my_token&' +
-        'message=%5BBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29&' +
+        'message=%5BSlidayBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29&' +
         'device=my_device&title=my_title&priority=my_priority'
       }
 

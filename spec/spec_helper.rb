@@ -2,13 +2,13 @@
 
 require 'rubygems' if RUBY_VERSION < '1.9'
 require 'bundler/setup'
-require 'backup'
+require 'sliday_backup'
 
 require 'timecop'
 
 Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| require f }
 
-module Backup::ExampleHelpers
+module SlidayBackup::ExampleHelpers
   # ripped from MiniTest :)
   # RSpec doesn't have a method for this? Am I missing something?
   def capture_io
@@ -35,7 +35,7 @@ RSpec.configure do |config|
 
   ##
   # Example Helpers
-  config.include Backup::ExampleHelpers
+  config.include SlidayBackup::ExampleHelpers
 
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
@@ -52,15 +52,15 @@ RSpec.configure do |config|
     SandboxFileUtils.deactivate!(:noop)
 
     # prevent system calls
-    Backup::Utilities.stubs(:gnu_tar?).returns(true)
-    Backup::Utilities.stubs(:utility)
-    Backup::Utilities.stubs(:run)
-    Backup::Pipeline.any_instance.stubs(:run)
+    SlidayBackup::Utilities.stubs(:gnu_tar?).returns(true)
+    SlidayBackup::Utilities.stubs(:utility)
+    SlidayBackup::Utilities.stubs(:run)
+    SlidayBackup::Pipeline.any_instance.stubs(:run)
 
-    Backup::Utilities.send(:reset!)
-    Backup::Config.send(:reset!)
+    SlidayBackup::Utilities.send(:reset!)
+    SlidayBackup::Config.send(:reset!)
     # Logger only queues messages received until Logger.start! is called.
-    Backup::Logger.send(:reset!)
+    SlidayBackup::Logger.send(:reset!)
   end
 end
 

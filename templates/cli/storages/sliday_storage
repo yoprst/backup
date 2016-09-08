@@ -1,0 +1,6 @@
+  ##
+  # SlidayStorage
+  #
+  store_with SlidayStorage do |s|
+    s.api_key       = "PROJECT_API_KEY"
+  end

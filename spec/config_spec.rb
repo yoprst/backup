@@ -2,7 +2,7 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Config do
   let(:config) { Config }
 
@@ -13,7 +13,7 @@ describe Config do
     it 'loads config.rb and models' do
       File.stubs(
         :exist? => true,
-        :read => "# Backup v4.x Configuration\n@loaded << :config",
+        :read => "# SlidayBackup v4.x Configuration\n@loaded << :config",
         :directory? => true
       )
       Dir.stubs(:[] => ['model_a', 'model_b'])
@@ -46,7 +46,7 @@ describe Config do
     it 'raises an error if config file version is invalid' do
       File.stubs(
         :exist? => true,
-        :read => '# Backup v3.x Configuration',
+        :read => '# SlidayBackup v3.x Configuration',
         :directory? => true
       )
       Dir.stubs(:[] => [])
@@ -61,13 +61,13 @@ describe Config do
 
     describe 'setting config paths from command line options' do
       let(:default_root_path) {
-        File.join(File.expand_path(ENV['HOME'] || ''), 'Backup')
+        File.join(File.expand_path(ENV['HOME'] || ''), 'SlidayBackup')
       }
 
       before do
         File.stubs(
           :exist? => true,
-          :read => '# Backup v4.x Configuration',
+          :read => '# SlidayBackup v4.x Configuration',
           :directory? => true
         )
         Dir.stubs(:[] => [])
@@ -306,7 +306,7 @@ describe Config do
       end
       config.instance_variables.should be_empty
 
-      load File.expand_path('../../lib/backup/config.rb', __FILE__)
+      load File.expand_path('../../lib/sliday_backup/config.rb', __FILE__)
       config.instance_variables.sort.map(&:to_sym).should == expected
     end
 
@@ -337,7 +337,7 @@ describe Config do
         it 'should set value using ENV["HOME"]' do
           config.send(:reset!)
           config.root_path.should ==
-              File.join(File.expand_path('test/home/dir'),'Backup')
+              File.join(File.expand_path('test/home/dir'),'SlidayBackup')
         end
       end
 
@@ -346,7 +346,7 @@ describe Config do
 
         it 'should set value using $PWD' do
           config.send(:reset!)
-          config.root_path.should == File.expand_path('Backup')
+          config.root_path.should == File.expand_path('SlidayBackup')
         end
       end
     end # context 'when setting @root_path'
@@ -356,7 +356,7 @@ describe Config do
 
       it 'should use #update' do
         config.expects(:update).with(
-          :root_path => File.join(File.expand_path('test/home/dir'),'Backup')
+          :root_path => File.join(File.expand_path('test/home/dir'),'SlidayBackup')
         )
         config.send(:reset!)
       end

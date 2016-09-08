@@ -2,9 +2,9 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-describe Backup::Utilities do
-  let(:utilities) { Backup::Utilities }
-  let(:helpers) { Module.new.extend(Backup::Utilities::Helpers) }
+describe SlidayBackup::Utilities do
+  let(:utilities) { SlidayBackup::Utilities }
+  let(:helpers) { Module.new.extend(SlidayBackup::Utilities::Helpers) }
 
   # Note: spec_helper resets Utilities before each example
 
@@ -91,7 +91,7 @@ describe Backup::Utilities do
         utilities.configure do
           tar 'not_found'
         end
-      end.to raise_error(Backup::Utilities::Error)
+      end.to raise_error(SlidayBackup::Utilities::Error)
     end
   end # describe '.configure'
 
@@ -131,11 +131,11 @@ describe Backup::Utilities do
     end
   end
 
-end # describe Backup::Utilities
+end # describe SlidayBackup::Utilities
 
-describe Backup::Utilities::Helpers do
-  let(:helpers) { Module.new.extend(Backup::Utilities::Helpers) }
-  let(:utilities) { Backup::Utilities }
+describe SlidayBackup::Utilities::Helpers do
+  let(:helpers) { Module.new.extend(SlidayBackup::Utilities::Helpers) }
+  let(:utilities) { SlidayBackup::Utilities }
 
   describe '#utility' do
     before do
@@ -169,7 +169,7 @@ describe Backup::Utilities::Helpers do
             returns("cached_path\n")
 
         helpers.send(:utility, :once_only).should == 'cached_path'
-        Class.new.extend(Backup::Utilities::Helpers).send(
+        Class.new.extend(SlidayBackup::Utilities::Helpers).send(
             :utility, :once_only).should == 'cached_path'
       end
     end
@@ -179,7 +179,7 @@ describe Backup::Utilities::Helpers do
 
       expect do
         helpers.send(:utility, :unknown)
-      end.to raise_error(Backup::Utilities::Error) {|err|
+      end.to raise_error(SlidayBackup::Utilities::Error) {|err|
         err.message.should match(/Could not locate 'unknown'/)
       }
     end
@@ -189,7 +189,7 @@ describe Backup::Utilities::Helpers do
       expect do
         helpers.send(:utility, nil)
       end.to raise_error(
-        Backup::Utilities::Error, 'Utilities::Error: Utility Name Empty'
+        SlidayBackup::Utilities::Error, 'Utilities::Error: Utility Name Empty'
       )
     end
 
@@ -198,7 +198,7 @@ describe Backup::Utilities::Helpers do
       expect do
         helpers.send(:utility, ' ')
       end.to raise_error(
-        Backup::Utilities::Error, 'Utilities::Error: Utility Name Empty'
+        SlidayBackup::Utilities::Error, 'Utilities::Error: Utility Name Empty'
       )
     end
   end # describe '#utility'
@@ -257,7 +257,7 @@ describe Backup::Utilities::Helpers do
       let(:process_success) { true }
 
       before do
-        Backup::Logger.expects(:info).with(
+        SlidayBackup::Logger.expects(:info).with(
           "Running system utility 'cmd_name'..."
         )
 
@@ -280,7 +280,7 @@ describe Backup::Utilities::Helpers do
         let(:stderr_messages) { '' }
 
         it 'should return stdout and log the stdout messages' do
-          Backup::Logger.expects(:info).with(
+          SlidayBackup::Logger.expects(:info).with(
             "cmd_name:STDOUT: out line1\ncmd_name:STDOUT: out line2"
           )
           helpers.send(:run, command).should == stdout_messages.strip
@@ -292,7 +292,7 @@ describe Backup::Utilities::Helpers do
         let(:stderr_messages) { "err line1\nerr line2\n" }
 
         it 'should return stdout and log the stderr messages' do
-          Backup::Logger.expects(:warn).with(
+          SlidayBackup::Logger.expects(:warn).with(
             "cmd_name:STDERR: err line1\ncmd_name:STDERR: err line2"
           )
           helpers.send(:run, command).should == ''
@@ -304,10 +304,10 @@ describe Backup::Utilities::Helpers do
         let(:stderr_messages) { "err line1\nerr line2\n" }
 
         it 'should return stdout and log both stdout and stderr messages' do
-          Backup::Logger.expects(:info).with(
+          SlidayBackup::Logger.expects(:info).with(
             "cmd_name:STDOUT: out line1\ncmd_name:STDOUT: out line2"
           )
-          Backup::Logger.expects(:warn).with(
+          SlidayBackup::Logger.expects(:warn).with(
             "cmd_name:STDERR: err line1\ncmd_name:STDERR: err line2"
           )
           helpers.send(:run, command).should == stdout_messages.strip
@@ -322,7 +322,7 @@ describe Backup::Utilities::Helpers do
       end
 
       before do
-        Backup::Logger.expects(:info).with(
+        SlidayBackup::Logger.expects(:info).with(
           "Running system utility 'cmd_name'..."
         )
 
@@ -404,7 +404,7 @@ describe Backup::Utilities::Helpers do
 
     context 'when the system fails to execute the command' do
       before do
-        Backup::Logger.expects(:info).with(
+        SlidayBackup::Logger.expects(:info).with(
           "Running system utility 'cmd_name'..."
         )
 
@@ -414,7 +414,7 @@ describe Backup::Utilities::Helpers do
       it 'should raise an error wrapping the system error raised' do
         expect do
           helpers.send(:run, command)
-        end.to raise_error(Backup::Utilities::Error) {|err|
+        end.to raise_error(SlidayBackup::Utilities::Error) {|err|
           err.message.should match("Failed to execute 'cmd_name'")
           err.message.should match('RuntimeError: exec call failed')
         }
@@ -424,13 +424,13 @@ describe Backup::Utilities::Helpers do
 
   describe 'gnu_tar?' do
     it 'returns true if tar_dist is gnu' do
-      Backup::Utilities.stubs(:gnu_tar?).returns(true)
+      SlidayBackup::Utilities.stubs(:gnu_tar?).returns(true)
       helpers.send(:gnu_tar?).should be(true)
     end
 
     it 'returns false if tar_dist is bsd' do
-      Backup::Utilities.stubs(:gnu_tar?).returns(false)
+      SlidayBackup::Utilities.stubs(:gnu_tar?).returns(false)
       helpers.send(:gnu_tar?).should be(false)
     end
   end
-end # describe Backup::Utilities::Helpers
+end # describe SlidayBackup::Utilities::Helpers

@@ -10,7 +10,7 @@ warn(<<EOS) unless version == found
 EOS
 
 require 'bundler/setup'
-require 'backup'
+require 'sliday_backup'
 
 Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| require f }
 
@@ -21,25 +21,25 @@ RSpec.configure do |config|
   config.filter_run_excluding :live
   config.filter_run :focus
 
-  config.include BackupSpec::ExampleHelpers
+  config.include SlidayBackupSpec::ExampleHelpers
 
   config.before(:each) do
     # Reset to default paths
-    Backup::Config.send(:reset!)
+    SlidayBackup::Config.send(:reset!)
 
     # Remove default and alt config paths if they exist.
-    FileUtils.rm_rf File.dirname(Backup::Config.config_file)
-    FileUtils.rm_rf BackupSpec::ALT_CONFIG_PATH
+    FileUtils.rm_rf File.dirname(SlidayBackup::Config.config_file)
+    FileUtils.rm_rf SlidayBackupSpec::ALT_CONFIG_PATH
 
     # Remove the local storage path if it exists.
-    FileUtils.rm_rf BackupSpec::LOCAL_STORAGE_PATH
+    FileUtils.rm_rf SlidayBackupSpec::LOCAL_STORAGE_PATH
 
     @argv_save = ARGV
   end
 
   # The last spec example to run will leave behind it's files in the
   # LOCAL_STORAGE_PATH (if used) and it's config.rb and model files
-  # in either the default path (~/Backup) or the alt path (~/Backup_alt)
+  # in either the default path (~/SlidayBackup) or the alt path (~/SlidayBackup_alt)
   # so these files may be inspected if needed.
   #
   # Adding `:focus` to spec examples will automatically enable the

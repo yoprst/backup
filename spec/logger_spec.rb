@@ -2,7 +2,7 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Logger do
   let(:console_logger) { mock('Console Logger') }
   let(:logfile_logger) { mock('Logfile Logger') }
@@ -383,7 +383,7 @@ describe Logger do
     end
 
     it 'replaces the logger' do
-      @current_logger.should be_a(Backup::Logger)
+      @current_logger.should be_a(SlidayBackup::Logger)
       @current_logger.should_not be(@initial_logger)
     end
 

@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Twitter do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Twitter.new(model) }
@@ -52,7 +52,7 @@ describe Notifier::Twitter do
   end # describe '#initialize'
 
   describe '#notify!' do
-    let(:message) { '[Backup::%s] test label (test_trigger)' }
+    let(:message) { '[SlidayBackup::%s] test label (test_trigger)' }
 
     context 'when status is :success' do
       it 'sends a success message' do

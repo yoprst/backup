@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Logger::FogAdapter do
 
   it 'replaces STDOUT fog warning channel' do

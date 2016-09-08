@@ -12,12 +12,12 @@
     # Optional
     #
     # Override Default Title
-    # Default is: "Backup #{:label}"
-    # datadog.title                = "Backup #{:status}"
+    # Default is: "SlidayBackup #{:label}"
+    # datadog.title                = "SlidayBackup #{:status}"
     #
     # Override Default Text
-    # Default is "Backup Notification for #{:label}"
-    # datadog.text                 = "Backup #{:status} - #{:message}"
+    # Default is "SlidayBackup Notification for #{:label}"
+    # datadog.text                 = "SlidayBackup #{:status} - #{:message}"
     #
     # Provide a hostname to associate this backup to
     # Default is nil

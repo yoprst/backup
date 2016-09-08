@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Hipchat do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Hipchat.new(model) }
@@ -77,7 +77,7 @@ describe Notifier::Hipchat do
     let(:client_options) { {api_version: 'v1'} }
     let(:client) { mock }
     let(:room) { mock }
-    let(:message) { '[Backup::%s] test label (test_trigger)' }
+    let(:message) { '[SlidayBackup::%s] test label (test_trigger)' }
 
     context 'when status is :success' do
       it 'sends a success message' do

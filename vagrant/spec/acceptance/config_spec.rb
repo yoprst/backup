@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe 'Backup Configuration' do
+describe 'SlidayBackup Configuration' do
 
   specify 'Models may be preconfigured' do
     create_config <<-EOS
@@ -33,11 +33,11 @@ describe 'Backup Configuration' do
   end
 
   specify 'Command line path options may be set in config.rb' do
-    alt_config_path = BackupSpec::ALT_CONFIG_PATH
+    alt_config_path = SlidayBackupSpec::ALT_CONFIG_PATH
     config_file = File.join(alt_config_path, 'my_config.rb')
 
     create_config <<-EOS, config_file
-      root_path BackupSpec::ALT_CONFIG_PATH
+      root_path SlidayBackupSpec::ALT_CONFIG_PATH
       tmp_path 'my_tmp'
     EOS
 
@@ -59,12 +59,12 @@ describe 'Backup Configuration' do
     ])
 
     # without setting root_path in config.rb,
-    # these would still be based on the default root_path (~/Backup)
-    expect( Backup::Config.tmp_path ).to eq(
+    # these would still be based on the default root_path (~/SlidayBackup)
+    expect( SlidayBackup::Config.tmp_path ).to eq(
       File.join(alt_config_path, 'my_tmp')
     )
-    expect( Backup::Config.data_path ).to eq(
-      File.join(alt_config_path, Backup::Config::DEFAULTS[:data_path])
+    expect( SlidayBackup::Config.data_path ).to eq(
+      File.join(alt_config_path, SlidayBackup::Config::DEFAULTS[:data_path])
     )
   end
 

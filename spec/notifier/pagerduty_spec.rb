@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::PagerDuty do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::PagerDuty.new(model) }
@@ -49,14 +49,14 @@ describe Notifier::PagerDuty do
       incident_details[:details].merge!(:status => :success)
 
       pagerduty.expects(:get_incident).with(incident_key).returns(incident)
-      incident.expects(:resolve).with('Backup - test label', incident_details)
+      incident.expects(:resolve).with('SlidayBackup - test label', incident_details)
 
       notifier.send(:notify!, :success)
     end
 
     it 'triggers an incident when status is :warning and resolve_on_warning is false' do
       incident_details[:details].merge!(:status => :warning)
-      pagerduty.expects(:trigger).with('Backup - test label', incident_details)
+      pagerduty.expects(:trigger).with('SlidayBackup - test label', incident_details)
 
       notifier.send(:notify!, :warning)
     end
@@ -67,14 +67,14 @@ describe Notifier::PagerDuty do
       incident_details[:details].merge!(:status => :warning)
 
       pagerduty.expects(:get_incident).with(incident_key).returns(incident)
-      incident.expects(:resolve).with('Backup - test label', incident_details)
+      incident.expects(:resolve).with('SlidayBackup - test label', incident_details)
 
       notifier.send(:notify!, :warning)
     end
 
     it 'triggers an incident when status is :failure' do
       incident_details[:details].merge!(:status => :failure)
-      pagerduty.expects(:trigger).with('Backup - test label', incident_details)
+      pagerduty.expects(:trigger).with('SlidayBackup - test label', incident_details)
 
       notifier.send(:notify!, :failure)
     end

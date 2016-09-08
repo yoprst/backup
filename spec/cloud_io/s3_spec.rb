@@ -1,8 +1,8 @@
 # encoding: utf-8
 require File.expand_path('../../spec_helper.rb', __FILE__)
-require 'backup/cloud_io/s3'
+require 'sliday_backup/cloud_io/s3'
 
-module Backup
+module SlidayBackup
 describe CloudIO::S3 do
   let(:connection) { mock }
 

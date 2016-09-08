@@ -2,12 +2,12 @@
 
 require File.expand_path('../../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::RSync::Local do
 
   specify 'single directory' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         sync_with RSync::Local do |rsync|
           rsync.path = '~/Storage'
           rsync.directories do |dirs|
@@ -25,7 +25,7 @@ describe Syncer::RSync::Local do
 
   specify 'multiple directories' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         sync_with RSync::Local do |rsync|
           rsync.path = '~/Storage'
           rsync.directories do |dirs|
@@ -49,7 +49,7 @@ describe Syncer::RSync::Local do
 
   specify 'multiple directories with excludes' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         sync_with RSync::Local do |rsync|
           rsync.path = '~/Storage'
           rsync.directories do |dirs|

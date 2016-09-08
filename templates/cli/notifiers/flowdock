@@ -9,8 +9,8 @@
     flowdock.token          = "token"
     flowdock.from_name      = 'my_name'
     flowdock.from_email     = 'email@example.com'
-    flowdock.subject        = 'My Daily Backup'
-    flowdock.source         = 'Backup'
+    flowdock.subject        = 'My Daily SlidayBackup'
+    flowdock.source         = 'SlidayBackup'
     flowdock.tags           = ['prod', 'backup']
     flowdock.link           = 'www.example.com'
   end

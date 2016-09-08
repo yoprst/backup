@@ -1,5 +1,5 @@
 
-Backup Failed!
+SlidayBackup Failed!
 
 Job: <%= @model.label %> (<%= @model.trigger %>)
 Started:  <%= @model.started_at %>
@@ -11,6 +11,6 @@ See the attached backup log for details.
 <% end %>
 
 ===========================================================================
-<%= Backup::Template.new.result("general/version.erb") %>
+<%= SlidayBackup::Template.new.result("general/version.erb") %>
 
-<%= Backup::Template.new.result("general/links") %>
+<%= SlidayBackup::Template.new.result("general/links") %>

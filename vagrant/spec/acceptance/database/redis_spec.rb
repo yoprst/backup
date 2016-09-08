@@ -2,14 +2,14 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Database::Redis' do
 
   shared_examples 'redis specs' do
 
     specify 'No Compression' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database Redis do |db|
             db.mode = #{ mode }
             db.rdb_path = '/var/lib/redis/dump.rdb'
@@ -29,7 +29,7 @@ describe 'Database::Redis' do
 
     specify 'With Compression' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database Redis do |db|
             db.mode = #{ mode }
             db.rdb_path = '/var/lib/redis/dump.rdb'
@@ -50,7 +50,7 @@ describe 'Database::Redis' do
 
     specify 'Multiple Dumps' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database Redis, :dump_01 do |db|
             db.mode = #{ mode }
             db.rdb_path = '/var/lib/redis/dump.rdb'

@@ -2,7 +2,7 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Splitter do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:package) { model.package }

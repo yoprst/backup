@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Storage::FTP do
   let(:model)   { Model.new(:test_trigger, 'test label') }
   let(:storage) { Storage::FTP.new(model) }

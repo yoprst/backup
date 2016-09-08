@@ -2,32 +2,32 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-describe 'Backup::Model' do
-  let(:model) { Backup::Model.new(:test_trigger, 'test label') }
+describe 'SlidayBackup::Model' do
+  let(:model) { SlidayBackup::Model.new(:test_trigger, 'test label') }
   let(:s)     { sequence '' }
 
   before do
-    Backup::Model.send(:reset!)
+    SlidayBackup::Model.send(:reset!)
   end
   after do
-    Backup::Model.send(:reset!)
+    SlidayBackup::Model.send(:reset!)
   end
 
   describe '.all' do
     it 'should be an empty array by default' do
-      Backup::Model.all.should == []
+      SlidayBackup::Model.all.should == []
     end
   end
 
   describe '.find_by_trigger' do
     before do
       [:one, :two, :three, :one].each_with_index do |sym, i|
-        Backup::Model.new("trigger_#{ sym }", "label#{ i + 1 }")
+        SlidayBackup::Model.new("trigger_#{ sym }", "label#{ i + 1 }")
       end
     end
 
     it 'should return an array of all models matching the trigger' do
-      models = Backup::Model.find_by_trigger('trigger_one')
+      models = SlidayBackup::Model.find_by_trigger('trigger_one')
       models.should be_a(Array)
       models.count.should be(2)
       models[0].label.should == 'label1'
@@ -35,27 +35,27 @@ describe 'Backup::Model' do
     end
 
     it 'should return an array of all models matching a wildcard trigger' do
-      models = Backup::Model.find_by_trigger('trigger_t*')
+      models = SlidayBackup::Model.find_by_trigger('trigger_t*')
       models.count.should be(2)
       models[0].label.should == 'label2'
       models[1].label.should == 'label3'
 
-      models = Backup::Model.find_by_trigger('trig*ne')
+      models = SlidayBackup::Model.find_by_trigger('trig*ne')
       models.count.should be(2)
       models[0].label.should == 'label1'
       models[1].label.should == 'label4'
 
-      Backup::Model.find_by_trigger('trigg*').count.should be(4)
+      SlidayBackup::Model.find_by_trigger('trigg*').count.should be(4)
     end
 
     it 'should accept a symbol' do
-      models = Backup::Model.find_by_trigger(:trigger_two)
+      models = SlidayBackup::Model.find_by_trigger(:trigger_two)
       models.count.should be(1)
       models[0].label.should == 'label2'
     end
 
     it 'should return an empty array if no matches are found' do
-      Backup::Model.find_by_trigger('foo*').should == []
+      SlidayBackup::Model.find_by_trigger('foo*').should == []
     end
 
   end # describe '.find_by_trigger'
@@ -64,13 +64,13 @@ describe 'Backup::Model' do
 
     it 'returns preconfiguration block if set' do
       block = Proc.new {}
-      Backup::Model.preconfigure.should be_nil
-      Backup::Model.preconfigure(&block)
-      Backup::Model.preconfigure.should be(block)
+      SlidayBackup::Model.preconfigure.should be_nil
+      SlidayBackup::Model.preconfigure(&block)
+      SlidayBackup::Model.preconfigure.should be(block)
     end
 
     it 'stores preconfiguration for each subclass' do
-      klass_a, klass_b = Class.new(Backup::Model), Class.new(Backup::Model)
+      klass_a, klass_b = Class.new(SlidayBackup::Model), Class.new(SlidayBackup::Model)
       block_a, block_b = Proc.new {}, Proc.new{}
       klass_a.preconfigure(&block_a)
       klass_b.preconfigure(&block_b)
@@ -81,12 +81,12 @@ describe 'Backup::Model' do
 
   describe 'subclassing Model' do
     specify 'custom model triggers can be found' do
-      klass = Class.new(Backup::Model)
+      klass = Class.new(SlidayBackup::Model)
       model_a = klass.new(:model_a, 'Model A')
-      model_b = Backup::Model.new(:model_b, 'Mowel B')
+      model_b = SlidayBackup::Model.new(:model_b, 'Mowel B')
       model_c = klass.new(:model_c, 'Model C')
-      Backup::Model.all.should == [model_a, model_b, model_c]
-      Backup::Model.find_by_trigger(:model_c).first.should be(model_c)
+      SlidayBackup::Model.all.should == [model_a, model_b, model_c]
+      SlidayBackup::Model.find_by_trigger(:model_c).first.should be(model_c)
     end
   end
 
@@ -95,7 +95,7 @@ describe 'Backup::Model' do
     it 'sets default values' do
       model.trigger.should == 'test_trigger'
       model.label.should == 'test label'
-      model.package.should be_an_instance_of Backup::Package
+      model.package.should be_an_instance_of SlidayBackup::Package
       model.time.should be_nil
 
       model.databases.should == []
@@ -113,11 +113,11 @@ describe 'Backup::Model' do
     end
 
     it 'should convert trigger to a string' do
-      Backup::Model.new(:foo, :bar).trigger.should == 'foo'
+      SlidayBackup::Model.new(:foo, :bar).trigger.should == 'foo'
     end
 
     it 'should convert label to a string' do
-      Backup::Model.new(:foo, :bar).label.should == 'bar'
+      SlidayBackup::Model.new(:foo, :bar).label.should == 'bar'
     end
 
     it 'should accept and instance_eval a block' do
@@ -125,7 +125,7 @@ describe 'Backup::Model' do
       block = Proc.new do
         before(&before_block)
       end
-      model = Backup::Model.new(:foo, '', &block)
+      model = SlidayBackup::Model.new(:foo, '', &block)
       model.before.should be(before_block)
     end
 
@@ -133,14 +133,14 @@ describe 'Backup::Model' do
       model_config_block  = lambda {|model| throw(:block_called, :model_config) }
       pre_config_block    = lambda {|model| throw(:block_called, :pre_config) }
       caught = catch(:block_called) do
-        Backup::Model.preconfigure(&pre_config_block)
-        Backup::Model.new('foo', '', &model_config_block)
+        SlidayBackup::Model.preconfigure(&pre_config_block)
+        SlidayBackup::Model.new('foo', '', &model_config_block)
       end
       caught.should == :pre_config
     end
 
     it 'should add itself to Model.all' do
-      Backup::Model.all.should == [model]
+      SlidayBackup::Model.all.should == [model]
     end
 
     # see also: spec/support/shared_examples/database.rb
@@ -148,7 +148,7 @@ describe 'Backup::Model' do
       db1, db2 = mock, mock
       db1.expects(:dump_filename)
       db2.expects(:dump_filename)
-      Backup::Model.new(:test_trigger, 'test label') do
+      SlidayBackup::Model.new(:test_trigger, 'test label') do
         self.databases << db1
         self.databases << db2
       end
@@ -201,12 +201,12 @@ describe 'Backup::Model' do
 
     # Set +const+ to +replacement+ for the calling block
     def using_fake(const, replacement)
-      orig = Backup.const_get(const)
-      Backup.send(:remove_const, const)
-      Backup.const_set(const, replacement)
+      orig = SlidayBackup.const_get(const)
+      SlidayBackup.send(:remove_const, const)
+      SlidayBackup.const_set(const, replacement)
       yield
-      Backup.send(:remove_const, const)
-      Backup.const_set(const, orig)
+      SlidayBackup.send(:remove_const, const)
+      SlidayBackup.const_set(const, orig)
     end
 
     describe '#archive' do
@@ -370,7 +370,7 @@ describe 'Backup::Model' do
         expect do
           model.split_into_chunks_of('345', 2)
         end.to raise_error {|err|
-          err.should be_an_instance_of Backup::Model::Error
+          err.should be_an_instance_of SlidayBackup::Model::Error
           err.message.should match(/must be Integers/)
         }
       end
@@ -379,7 +379,7 @@ describe 'Backup::Model' do
         expect do
           model.split_into_chunks_of(345, '2')
         end.to raise_error {|err|
-          err.should be_an_instance_of Backup::Model::Error
+          err.should be_an_instance_of SlidayBackup::Model::Error
           err.message.should match(/must be Integers/)
         }
       end
@@ -439,7 +439,7 @@ describe 'Backup::Model' do
       end
 
       it 'sets exit_status to 1 when warnings are logged' do
-        model.stubs(:procedures).returns([lambda { Backup::Logger.warn 'foo' }])
+        model.stubs(:procedures).returns([lambda { SlidayBackup::Logger.warn 'foo' }])
 
         model.perform!
 
@@ -485,7 +485,7 @@ describe 'Backup::Model' do
 
       specify 'before hook may log warnings' do
         procedure_called, after_called_with = nil, nil
-        model.before { Backup::Logger.warn 'foo' }
+        model.before { SlidayBackup::Logger.warn 'foo' }
         model.stubs(:procedures).returns([lambda { procedure_called = true }])
         model.after {|status| after_called_with = status }
 
@@ -546,7 +546,7 @@ describe 'Backup::Model' do
 
       specify 'after hook may log warnings' do
         after_called_with = nil
-        model.after {|status| after_called_with = status; Backup::Logger.warn 'foo' }
+        model.after {|status| after_called_with = status; SlidayBackup::Logger.warn 'foo' }
 
         model.perform!
 
@@ -557,18 +557,18 @@ describe 'Backup::Model' do
       specify 'after hook warnings will not decrease exit_status' do
         after_called_with = nil
         model.stubs(:procedures).returns([lambda { raise StandardError }])
-        model.after {|status| after_called_with = status; Backup::Logger.warn 'foo' }
+        model.after {|status| after_called_with = status; SlidayBackup::Logger.warn 'foo' }
 
         model.perform!
 
         model.exit_status.should be 2
         after_called_with.should be 2
-        Backup::Logger.has_warnings?.should be_true
+        SlidayBackup::Logger.has_warnings?.should be_true
       end
 
       specify 'after hook may fail model with non-fatal exceptions' do
         after_called_with = nil
-        model.stubs(:procedures).returns([lambda { Backup::Logger.warn 'foo' }])
+        model.stubs(:procedures).returns([lambda { SlidayBackup::Logger.warn 'foo' }])
         model.after {|status| after_called_with = status; raise StandardError }
 
         model.perform!
@@ -686,7 +686,7 @@ describe 'Backup::Model' do
 
   describe '#prepare!' do
     it 'should prepare for the backup' do
-      Backup::Cleaner.expects(:prepare).with(model)
+      SlidayBackup::Cleaner.expects(:prepare).with(model)
 
       model.send(:prepare!)
     end
@@ -694,8 +694,8 @@ describe 'Backup::Model' do
 
   describe '#package!' do
     it 'should package the backup' do
-      Backup::Packager.expects(:package!).in_sequence(s).with(model)
-      Backup::Cleaner.expects(:remove_packaging).in_sequence(s).with(model)
+      SlidayBackup::Packager.expects(:package!).in_sequence(s).with(model)
+      SlidayBackup::Cleaner.expects(:remove_packaging).in_sequence(s).with(model)
 
       model.send(:package!)
     end
@@ -748,7 +748,7 @@ describe 'Backup::Model' do
 
           expected_messages = [/\ADifferent error\z/, /.*/, /\AAnother error\z/, /.*/] # every other invocation contains a stack trace
 
-          Backup::Logger.expects(:error).in_sequence(s).times(4).with do |err|
+          SlidayBackup::Logger.expects(:error).in_sequence(s).times(4).with do |err|
             err.to_s =~ expected_messages.shift
           end
 
@@ -760,7 +760,7 @@ describe 'Backup::Model' do
 
   describe '#clean!' do
     it 'should remove the final packaged files' do
-      Backup::Cleaner.expects(:remove_package).with(model.package)
+      SlidayBackup::Cleaner.expects(:remove_package).with(model.package)
 
       model.send(:clean!)
     end
@@ -813,11 +813,11 @@ describe 'Backup::Model' do
       end
     end
 
-    context 'when name is given as a module defined under Backup::Config::DSL' do
+    context 'when name is given as a module defined under SlidayBackup::Config::DSL' do
       # this is necessary since the specs in spec/config/dsl_spec.rb
-      # remove all the constants from Backup::Config::DSL as part of those tests.
+      # remove all the constants from SlidayBackup::Config::DSL as part of those tests.
       before(:all) do
-        class Backup::Config::DSL
+        class SlidayBackup::Config::DSL
           module TestScope
             module TestKlass; end
           end
@@ -828,7 +828,7 @@ describe 'Backup::Model' do
         model.send(
           :get_class_from_scope,
           Fake,
-          Backup::Config::DSL::TestScope
+          SlidayBackup::Config::DSL::TestScope
         ).should == Fake::TestScope
       end
 
@@ -836,7 +836,7 @@ describe 'Backup::Model' do
         model.send(
           :get_class_from_scope,
           Fake,
-          Backup::Config::DSL::TestScope::TestKlass
+          SlidayBackup::Config::DSL::TestScope::TestKlass
         ).should == Fake::TestScope::TestKlass
       end
     end
@@ -852,7 +852,7 @@ describe 'Backup::Model' do
     end
 
     context 'when the model completed successfully with warnings' do
-      before { Backup::Logger.stubs(:has_warnings?).returns(true) }
+      before { SlidayBackup::Logger.stubs(:has_warnings?).returns(true) }
 
       it 'sets exit status to 1' do
         model.send(:set_exit_status)
@@ -882,9 +882,9 @@ describe 'Backup::Model' do
   describe '#log!' do
     context 'when action is :started' do
       it 'logs that the backup has started' do
-        Backup::Logger.expects(:info).with(
-          "Performing Backup for 'test label (test_trigger)'!\n" +
-          "[ backup #{ Backup::VERSION } : #{ RUBY_DESCRIPTION } ]"
+        SlidayBackup::Logger.expects(:info).with(
+          "Performing SlidayBackup for 'test label (test_trigger)'!\n" +
+          "[ backup #{ SlidayBackup::VERSION } : #{ RUBY_DESCRIPTION } ]"
         )
         model.send(:log!, :started)
       end
@@ -897,8 +897,8 @@ describe 'Backup::Model' do
         before { model.stubs(:exit_status).returns(0) }
 
         it 'logs that the backup completed successfully' do
-          Backup::Logger.expects(:info).with(
-            "Backup for 'test label (test_trigger)' " +
+          SlidayBackup::Logger.expects(:info).with(
+            "SlidayBackup for 'test label (test_trigger)' " +
             "Completed Successfully in 01:02:03"
           )
           model.send(:log!, :finished)
@@ -909,8 +909,8 @@ describe 'Backup::Model' do
         before { model.stubs(:exit_status).returns(1) }
 
         it 'logs that the backup completed successfully with warnings' do
-          Backup::Logger.expects(:warn).with(
-            "Backup for 'test label (test_trigger)' " +
+          SlidayBackup::Logger.expects(:warn).with(
+            "SlidayBackup for 'test label (test_trigger)' " +
             "Completed Successfully (with Warnings) in 01:02:03"
           )
           model.send(:log!, :finished)
@@ -927,16 +927,16 @@ describe 'Backup::Model' do
         end
 
         it 'logs that the backup failed with a non-fatal exception' do
-          Backup::Model::Error.expects(:wrap).in_sequence(s).with do |err, msg|
+          SlidayBackup::Model::Error.expects(:wrap).in_sequence(s).with do |err, msg|
             err.message.should == 'non-fatal error'
-            msg.should match(/Backup for test label \(test_trigger\) Failed!/)
+            msg.should match(/SlidayBackup for test label \(test_trigger\) Failed!/)
           end.returns(error_a)
-          Backup::Logger.expects(:error).in_sequence(s).with(error_a)
-          Backup::Logger.expects(:error).in_sequence(s).with(
+          SlidayBackup::Logger.expects(:error).in_sequence(s).with(error_a)
+          SlidayBackup::Logger.expects(:error).in_sequence(s).with(
             "\nBacktrace:\n\s\smany\n\s\sbacktrace\n\s\slines\n\n"
           )
 
-          Backup::Cleaner.expects(:warnings).in_sequence(s).with(model)
+          SlidayBackup::Cleaner.expects(:warnings).in_sequence(s).with(model)
 
           model.send(:log!, :finished)
         end
@@ -952,16 +952,16 @@ describe 'Backup::Model' do
         end
 
         it 'logs that the backup failed with a fatal exception' do
-          Backup::Model::FatalError.expects(:wrap).in_sequence(s).with do |err, msg|
+          SlidayBackup::Model::FatalError.expects(:wrap).in_sequence(s).with do |err, msg|
             err.message.should == 'fatal error'
-            msg.should match(/Backup for test label \(test_trigger\) Failed!/)
+            msg.should match(/SlidayBackup for test label \(test_trigger\) Failed!/)
           end.returns(error_a)
-          Backup::Logger.expects(:error).in_sequence(s).with(error_a)
-          Backup::Logger.expects(:error).in_sequence(s).with(
+          SlidayBackup::Logger.expects(:error).in_sequence(s).with(error_a)
+          SlidayBackup::Logger.expects(:error).in_sequence(s).with(
             "\nBacktrace:\n\s\smany\n\s\sbacktrace\n\s\slines\n\n"
           )
 
-          Backup::Cleaner.expects(:warnings).in_sequence(s).with(model)
+          SlidayBackup::Cleaner.expects(:warnings).in_sequence(s).with(model)
 
           model.send(:log!, :finished)
         end

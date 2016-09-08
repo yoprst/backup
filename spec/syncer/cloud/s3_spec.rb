@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::Cloud::S3 do
   let(:required_config) {
     Proc.new do |s3|

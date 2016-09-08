@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::Cloud::LocalFile do
 
   describe '.find' do

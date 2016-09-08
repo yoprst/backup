@@ -2,12 +2,12 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-describe 'Backup::Packager' do
-  let(:packager)  { Backup::Packager }
+describe 'SlidayBackup::Packager' do
+  let(:packager)  { SlidayBackup::Packager }
 
   it 'should include Utilities::Helpers' do
     packager.instance_eval('class << self; self; end').
-        include?(Backup::Utilities::Helpers).should be_true
+        include?(SlidayBackup::Utilities::Helpers).should be_true
   end
 
   describe '#package!' do
@@ -24,16 +24,16 @@ describe 'Backup::Packager' do
         model.expects(:package).in_sequence(s).returns(package)
         model.expects(:encryptor).in_sequence(s).returns(encryptor)
         model.expects(:splitter).in_sequence(s).returns(splitter)
-        Backup::Pipeline.expects(:new).in_sequence(s).returns(pipeline)
+        SlidayBackup::Pipeline.expects(:new).in_sequence(s).returns(pipeline)
 
-        Backup::Logger.expects(:info).in_sequence(s).with(
+        SlidayBackup::Logger.expects(:info).in_sequence(s).with(
           'Packaging the backup files...'
         )
         packager.expects(:procedure).in_sequence(s).returns(procedure)
         procedure.expects(:call).in_sequence(s)
 
         pipeline.expects(:success?).in_sequence(s).returns(true)
-        Backup::Logger.expects(:info).in_sequence(s).with(
+        SlidayBackup::Logger.expects(:info).in_sequence(s).with(
           'Packaging Complete!'
         )
 
@@ -51,9 +51,9 @@ describe 'Backup::Packager' do
         model.expects(:package).in_sequence(s).returns(package)
         model.expects(:encryptor).in_sequence(s).returns(encryptor)
         model.expects(:splitter).in_sequence(s).returns(splitter)
-        Backup::Pipeline.expects(:new).in_sequence(s).returns(pipeline)
+        SlidayBackup::Pipeline.expects(:new).in_sequence(s).returns(pipeline)
 
-        Backup::Logger.expects(:info).in_sequence(s).with(
+        SlidayBackup::Logger.expects(:info).in_sequence(s).with(
           'Packaging the backup files...'
         )
         packager.expects(:procedure).in_sequence(s).returns(procedure)
@@ -65,8 +65,8 @@ describe 'Backup::Packager' do
         expect do
           packager.package!(model)
         end.to raise_error(
-          Backup::Packager::Error,
-          "Packager::Error: Failed to Create Backup Package\n" +
+          SlidayBackup::Packager::Error,
+          "Packager::Error: Failed to Create SlidayBackup Package\n" +
           "  pipeline_errors"
         )
 
@@ -128,10 +128,10 @@ describe 'Backup::Packager' do
         packager.instance_variable_set(:@splitter,  nil)
 
         pipeline.expects(:add).in_sequence(s).with(
-          "tar -cf - -C '#{ Backup::Config.tmp_path }' 'model_trigger'", [0, 1]
+          "tar -cf - -C '#{ SlidayBackup::Config.tmp_path }' 'model_trigger'", [0, 1]
         )
         pipeline.expects(:<<).in_sequence(s).with(
-          "cat > #{ File.join(Backup::Config.tmp_path, 'base_filename.tar') }"
+          "cat > #{ File.join(SlidayBackup::Config.tmp_path, 'base_filename.tar') }"
         )
         pipeline.expects(:run).in_sequence(s)
 
@@ -146,11 +146,11 @@ describe 'Backup::Packager' do
         packager.instance_variable_set(:@splitter,  nil)
 
         pipeline.expects(:add).in_sequence(s).with(
-          "tar -cf - -C '#{ Backup::Config.tmp_path }' 'model_trigger'", [0, 1]
+          "tar -cf - -C '#{ SlidayBackup::Config.tmp_path }' 'model_trigger'", [0, 1]
         )
         pipeline.expects(:<<).in_sequence(s).with('encryption_command')
         pipeline.expects(:<<).in_sequence(s).with(
-          "cat > #{ File.join(Backup::Config.tmp_path, 'base_filename.tar.enc') }"
+          "cat > #{ File.join(SlidayBackup::Config.tmp_path, 'base_filename.tar.enc') }"
         )
         pipeline.expects(:run).in_sequence(s).with do
           Fake.stack_trace << :command_executed
@@ -172,7 +172,7 @@ describe 'Backup::Packager' do
         packager.instance_variable_set(:@splitter,  splitter)
 
         pipeline.expects(:add).in_sequence(s).with(
-          "tar -cf - -C '#{ Backup::Config.tmp_path }' 'model_trigger'", [0, 1]
+          "tar -cf - -C '#{ SlidayBackup::Config.tmp_path }' 'model_trigger'", [0, 1]
         )
         pipeline.expects(:<<).in_sequence(s).with('splitter_command')
 
@@ -196,7 +196,7 @@ describe 'Backup::Packager' do
         packager.instance_variable_set(:@splitter,  splitter)
 
         pipeline.expects(:add).in_sequence(s).with(
-          "tar -cf - -C '#{ Backup::Config.tmp_path }' 'model_trigger'", [0, 1]
+          "tar -cf - -C '#{ SlidayBackup::Config.tmp_path }' 'model_trigger'", [0, 1]
         )
         pipeline.expects(:<<).in_sequence(s).with('encryption_command')
         pipeline.expects(:<<).in_sequence(s).with('splitter_command')

@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-module BackupSpec
+module SlidayBackupSpec
   PROJECT_ROOT = '/backup.git'
-  CONFIG_TEMPLATE = Backup::Template.new.result('cli/config')
+  CONFIG_TEMPLATE = SlidayBackup::Template.new.result('cli/config')
   LOCAL_STORAGE_PATH = '/home/vagrant/Storage'
-  ALT_CONFIG_PATH = '/home/vagrant/Backup_alt'
+  ALT_CONFIG_PATH = '/home/vagrant/SlidayBackup_alt'
   LOCAL_SYNC_PATH = '/home/vagrant/sync_root'
   GPG_HOME_DIR = '/home/vagrant/gpg_home' # default would be ~/.gnupg
 
@@ -12,8 +12,8 @@ module BackupSpec
 
     # Creates the config.rb file.
     #
-    # By default, this will be created as ~/Backup/config.rb,
-    # since Backup::Config is reset before each example.
+    # By default, this will be created as ~/SlidayBackup/config.rb,
+    # since SlidayBackup::Config is reset before each example.
     #
     # If paths will be changed when calling backup_perform(),
     # like --config-file or --root-path, then the full path to
@@ -29,7 +29,7 @@ module BackupSpec
     # you can omit this method from your example. Calling create_model()
     # will call this method if the +config_file+ does not exist.
     def create_config(text = nil, config_file = nil)
-      config_file ||= Backup::Config.config_file
+      config_file ||= SlidayBackup::Config.config_file
       config_path = File.dirname(config_file)
 
       unless text.to_s.empty?
@@ -39,17 +39,17 @@ module BackupSpec
       config = <<-EOS.gsub(/^        /, '')
         # encoding: utf-8
 
-        Backup::Utilities.configure do
+        SlidayBackup::Utilities.configure do
           # silence the log output produced by the auto-detection
           tar_dist :gnu
         end
 
-        Backup::Logger.configure do
+        SlidayBackup::Logger.configure do
           console.quiet = true
           logfile.enabled = false
         end
 
-        Backup::Storage::Local.defaults do |local|
+        SlidayBackup::Storage::Local.defaults do |local|
           local.path = '#{ LOCAL_STORAGE_PATH }'
         end
 
@@ -65,7 +65,7 @@ module BackupSpec
 
     # Creates a model file.
     #
-    # Pass +config_file+ if it won't be at the default path +~/Backup/+.
+    # Pass +config_file+ if it won't be at the default path +~/SlidayBackup/+.
     #
     # Creates the model as +/models/<trigger>.rb+, relative to the path
     # of +config_file+.
@@ -73,7 +73,7 @@ module BackupSpec
     # Note that the first line in +text+ will set the indent for the text being
     # given and that indent will be removed from all lines in +text+
     def create_model(trigger, text, config_file = nil)
-      config_file ||= Backup::Config.config_file
+      config_file ||= SlidayBackup::Config.config_file
       model_path = File.join(File.dirname(config_file), 'models')
       model_file = File.join(model_path, trigger.to_s + '.rb')
 
@@ -112,28 +112,28 @@ module BackupSpec
       argv = ['perform', '-t', triggers.join(',')] + options
 
       # Reset config paths, utility paths and the logger.
-      Backup::Config.send(:reset!)
-      Backup::Utilities.send(:reset!)
-      Backup::Logger.send(:reset!)
+      SlidayBackup::Config.send(:reset!)
+      SlidayBackup::Utilities.send(:reset!)
+      SlidayBackup::Logger.send(:reset!)
       # Ensure multiple runs have different timestamps
-      sleep 1 unless Backup::Model.all.empty?
+      sleep 1 unless SlidayBackup::Model.all.empty?
       # Clear previously loaded models and other class instance variables
-      Backup::Model.send(:reset!)
+      SlidayBackup::Model.send(:reset!)
 
       ARGV.replace(argv)
 
       if exit_status
         expect do
-          Backup::CLI.start
+          SlidayBackup::CLI.start
         end.to raise_error(SystemExit) {|exit|
           expect( exit.status ).to be(exit_status)
         }
       else
-        Backup::CLI.start
+        SlidayBackup::CLI.start
       end
 
-      models = triggers.map {|t| Backup::Model.find_by_trigger(t).first }
-      jobs = models.map {|m| BackupSpec::PerformedJob.new(m) }
+      models = triggers.map {|t| SlidayBackup::Model.find_by_trigger(t).first }
+      jobs = models.map {|m| SlidayBackupSpec::PerformedJob.new(m) }
       jobs.count > 1 ? jobs : jobs.first
     end
 

@@ -2,14 +2,14 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Database::MySQL' do
 
   describe 'All Databases' do
 
     specify 'All tables' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL do |db|
             db.name     = :all
             db.username = 'root'
@@ -32,12 +32,12 @@ describe 'Database::MySQL' do
     specify 'Tables Excluded' do
       # This warning will occur if --events is not used.
       create_config <<-EOS
-        Backup::Logger.configure do
+        SlidayBackup::Logger.configure do
           ignore_warning 'Warning: Skipping the data of table mysql.event'
         end
       EOS
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL do |db|
             db.name         = :all
             db.username     = 'root'
@@ -63,7 +63,7 @@ describe 'Database::MySQL' do
 
     specify 'All tables' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL do |db|
             db.name     = 'backup_test_01'
             db.username = 'root'
@@ -84,7 +84,7 @@ describe 'Database::MySQL' do
 
     specify 'Only one table' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL do |db|
             db.name         = 'backup_test_01'
             db.username     = 'root'
@@ -106,7 +106,7 @@ describe 'Database::MySQL' do
 
     specify 'Exclude a table' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL do |db|
             db.name         = 'backup_test_01'
             db.username     = 'root'
@@ -132,7 +132,7 @@ describe 'Database::MySQL' do
 
     specify 'All tables' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MySQL, :dump_01 do |db|
             db.name     = 'backup_test_01'
             db.username = 'root'

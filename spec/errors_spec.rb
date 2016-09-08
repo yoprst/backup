@@ -2,11 +2,11 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-module Backup
-describe 'Backup Errors' do
+module SlidayBackup
+describe 'SlidayBackup Errors' do
 
 shared_examples 'a nested exception' do
-  let(:class_name) { described_class.name.sub(/^Backup::/, '') }
+  let(:class_name) { described_class.name.sub(/^SlidayBackup::/, '') }
 
   context 'with stubbed constants' do
     before do
@@ -15,9 +15,9 @@ shared_examples 'a nested exception' do
       ErrorC = Class.new(described_class)
     end
     after do
-      Backup.send(:remove_const, :ErrorA)
-      Backup.send(:remove_const, :ErrorB)
-      Backup.send(:remove_const, :ErrorC)
+      SlidayBackup.send(:remove_const, :ErrorA)
+      SlidayBackup.send(:remove_const, :ErrorB)
+      SlidayBackup.send(:remove_const, :ErrorC)
     end
 
     it 'allows errors to cascade through the system' do
@@ -472,5 +472,5 @@ describe FatalError do
   it_behaves_like 'a nested exception'
 end
 
-end # describe 'Backup Errors'
+end # describe 'SlidayBackup Errors'
 end

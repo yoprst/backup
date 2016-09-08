@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::HttpPost do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) {
@@ -11,11 +11,11 @@ describe Notifier::HttpPost do
     end
   }
   let(:default_form_data) {
-    'message=%5BBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29' +
+    'message=%5BSlidayBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29' +
     '&status=success'
   }
   let(:default_headers) {
-    { 'User-Agent' => "Backup/#{ VERSION }",
+    { 'User-Agent' => "SlidayBackup/#{ VERSION }",
       'Content-Type' => 'application/x-www-form-urlencoded' }
   }
 
@@ -79,7 +79,7 @@ describe Notifier::HttpPost do
       Excon.expects(:post).with(
         'https://www.example.com/path',
         {
-          :headers  => { 'User-Agent' => "Backup/#{ VERSION }",
+          :headers  => { 'User-Agent' => "SlidayBackup/#{ VERSION }",
                          'Content-Type' => 'application/x-www-form-urlencoded',
                          'Authorization' => 'my_auth' },
           :body     => default_form_data,
@@ -129,7 +129,7 @@ describe Notifier::HttpPost do
 
     it 'defines additional form parameters to be sent' do
       notifier.params = { 'my_param' => 'my_value' }
-      form_data = 'message=%5BBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29' +
+      form_data = 'message=%5BSlidayBackup%3A%3ASuccess%5D+test+label+%28test_trigger%29' +
           '&my_param=my_value&status=success'
 
       Excon.expects(:post).with(
@@ -253,7 +253,7 @@ describe Notifier::HttpPost do
 
   describe '#notify!' do
     let(:form_data) {
-      'message=%5BBackup%3A%3A' + 'TAG' +
+      'message=%5BSlidayBackup%3A%3A' + 'TAG' +
       '%5D+test+label+%28test_trigger%29&status=' + 'STATUS'
     }
 

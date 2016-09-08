@@ -2,12 +2,12 @@
 
 require File.expand_path('../spec_helper.rb', __FILE__)
 
-describe 'Backup::Pipeline' do
-  let(:pipeline)  { Backup::Pipeline.new }
+describe 'SlidayBackup::Pipeline' do
+  let(:pipeline)  { SlidayBackup::Pipeline.new }
 
   it 'should include Utilities::Helpers' do
-    Backup::Pipeline.
-        include?(Backup::Utilities::Helpers).should be_true
+    SlidayBackup::Pipeline.
+        include?(SlidayBackup::Utilities::Helpers).should be_true
   end
 
   describe '#initialize' do
@@ -45,7 +45,7 @@ describe 'Backup::Pipeline' do
     let(:stderr) { mock }
 
     before do
-      Backup::Pipeline.any_instance.unstub(:run)
+      SlidayBackup::Pipeline.any_instance.unstub(:run)
       pipeline.expects(:pipeline).returns('foo')
       # stub Utilities::Helpers#command_name so it simply returns what it's passed
       pipeline.class.send(:define_method, :command_name, lambda {|arg| arg } )
@@ -69,7 +69,7 @@ describe 'Backup::Pipeline' do
           end
 
           it 'should process the returned stdout/stderr and report no errors' do
-            Backup::Logger.expects(:warn).never
+            SlidayBackup::Logger.expects(:warn).never
 
             pipeline.run
             pipeline.stderr.should == ''
@@ -84,7 +84,7 @@ describe 'Backup::Pipeline' do
           end
 
           it 'should log a warning with the stderr messages' do
-            Backup::Logger.expects(:warn).with('stderr_messages_output')
+            SlidayBackup::Logger.expects(:warn).with('stderr_messages_output')
 
             pipeline.run
             pipeline.stderr.should == 'stderr output'
@@ -107,7 +107,7 @@ describe 'Backup::Pipeline' do
           end
 
           it 'should set @errors and @stderr without logging warnings' do
-            Backup::Logger.expects(:warn).never
+            SlidayBackup::Logger.expects(:warn).never
 
             pipeline.run
             pipeline.stderr.should == 'stderr output'
@@ -126,7 +126,7 @@ describe 'Backup::Pipeline' do
           end
 
           it 'should properly associate the exitstatus for each command' do
-            Backup::Logger.expects(:warn).never
+            SlidayBackup::Logger.expects(:warn).never
 
             pipeline.run
             pipeline.stderr.should == 'stderr output'
@@ -145,7 +145,7 @@ describe 'Backup::Pipeline' do
           end
 
           it 'should properly associate the exitstatus for each command' do
-            Backup::Logger.expects(:warn).never
+            SlidayBackup::Logger.expects(:warn).never
 
             pipeline.run
             pipeline.stderr.should == 'stderr output'
@@ -173,7 +173,7 @@ describe 'Backup::Pipeline' do
       it 'should raise an error' do
         expect do
           pipeline.run
-        end.to raise_error(Backup::Pipeline::Error) {|err|
+        end.to raise_error(SlidayBackup::Pipeline::Error) {|err|
           err.message.should eq(
             "Pipeline::Error: Pipeline failed to execute\n" +
             "--- Wrapped Exception ---\n" +
@@ -289,4 +289,4 @@ describe 'Backup::Pipeline' do
     end
   end # describe '#stderr_message'
 
-end #describe 'Backup::Pipeline'
+end #describe 'SlidayBackup::Pipeline'

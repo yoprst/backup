@@ -2,14 +2,14 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Database::PostgreSQL' do
 
   describe 'All Databases' do
 
     specify 'With compression' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL
           compress_with Gzip
           store_with Local
@@ -26,7 +26,7 @@ describe 'Database::PostgreSQL' do
 
     specify 'Without compression' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL
           store_with Local
         end
@@ -46,7 +46,7 @@ describe 'Database::PostgreSQL' do
 
     specify 'All tables' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL do |db|
             db.name = 'backup_test_01'
           end
@@ -64,7 +64,7 @@ describe 'Database::PostgreSQL' do
 
     specify 'Only one table' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL do |db|
             db.name = 'backup_test_01'
             db.only_tables = ['ones']
@@ -83,7 +83,7 @@ describe 'Database::PostgreSQL' do
 
     specify 'Exclude a table' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL do |db|
             db.name = 'backup_test_01'
             db.skip_tables = ['ones']
@@ -106,7 +106,7 @@ describe 'Database::PostgreSQL' do
 
     specify 'All tables' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database PostgreSQL, :dump_01 do |db|
             db.name = 'backup_test_01'
           end

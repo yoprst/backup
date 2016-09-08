@@ -2,12 +2,12 @@
 
 require File.expand_path('../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Splitter do
 
   specify 'suffix length may be configured' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 1, 5
 
         archive :my_archive do |archive|

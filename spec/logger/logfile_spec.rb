@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Logger::Logfile do
   before do
     @tmpdir = Dir.mktmpdir('backup_spec')
@@ -15,7 +15,7 @@ describe Logger::Logfile do
     @log_path_default = File.join(@root_path, 'log')
     @logfile_default = File.join(@log_path_default, 'backup.log')
 
-    Backup::Config.stubs(:root_path).returns(@root_path)
+    SlidayBackup::Config.stubs(:root_path).returns(@root_path)
 
     Logger::Console.any_instance.expects(:log).never
     Logger::Syslog.any_instance.expects(:log).never
@@ -114,7 +114,7 @@ describe Logger::Logfile do
           Logger.start!
         end
 
-        it 'should create the log_path relative to Backup::Config.root_path' do
+        it 'should create the log_path relative to SlidayBackup::Config.root_path' do
           File.exist?(@log_path_default).should be_false
           File.exist?(@log_path_absolute).should be_false
           File.exist?(@log_path_rel).should be_true

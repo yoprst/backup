@@ -3,30 +3,30 @@
 require File.expand_path('../spec_helper.rb', __FILE__)
 require 'rubygems/dependency_installer'
 
-describe 'Backup::CLI' do
-  let(:cli)     { Backup::CLI }
+describe 'SlidayBackup::CLI' do
+  let(:cli)     { SlidayBackup::CLI }
   let(:s)       { sequence '' }
 
   before  { @argv_save = ARGV }
   after   { ARGV.replace(@argv_save) }
 
   describe '#perform' do
-    let(:model_a) { Backup::Model.new(:test_trigger_a, 'test label a') }
-    let(:model_b) { Backup::Model.new(:test_trigger_b, 'test label b') }
+    let(:model_a) { SlidayBackup::Model.new(:test_trigger_a, 'test label a') }
+    let(:model_b) { SlidayBackup::Model.new(:test_trigger_b, 'test label b') }
     let(:s) { sequence '' }
 
-    after { Backup::Model.send(:reset!) }
+    after { SlidayBackup::Model.send(:reset!) }
 
     describe 'setting logger options' do
-      let(:logger_options) { Backup::Logger.instance_variable_get(:@config).dsl }
+      let(:logger_options) { SlidayBackup::Logger.instance_variable_get(:@config).dsl }
 
       before do
-        Backup::Config.expects(:load).in_sequence(s)
-        Backup::Logger.expects(:start!).in_sequence(s)
+        SlidayBackup::Config.expects(:load).in_sequence(s)
+        SlidayBackup::Logger.expects(:start!).in_sequence(s)
         model_a.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_b.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
       end
 
       it 'configures console and logfile loggers by default' do
@@ -102,17 +102,17 @@ describe 'Backup::CLI' do
     end # describe 'setting logger options'
 
     describe 'setting triggers' do
-      let(:model_c) { Backup::Model.new(:test_trigger_c, 'test label c') }
+      let(:model_c) { SlidayBackup::Model.new(:test_trigger_c, 'test label c') }
 
       before do
-        Backup::Logger.expects(:configure).in_sequence(s)
-        Backup::Config.expects(:load).in_sequence(s)
-        Backup::Logger.expects(:start!).in_sequence(s)
+        SlidayBackup::Logger.expects(:configure).in_sequence(s)
+        SlidayBackup::Config.expects(:load).in_sequence(s)
+        SlidayBackup::Logger.expects(:start!).in_sequence(s)
       end
 
       it 'performs a given trigger' do
         model_a.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_b.expects(:perform!).never
 
         expect do
@@ -125,9 +125,9 @@ describe 'Backup::CLI' do
 
       it 'performs multiple triggers' do
         model_a.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_b.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -139,11 +139,11 @@ describe 'Backup::CLI' do
 
       it 'performs multiple models that share a trigger name' do
         model_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
-        model_d = Backup::Model.new(:test_trigger_c, 'test label d')
+        model_d = SlidayBackup::Model.new(:test_trigger_c, 'test label d')
         model_d.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -155,11 +155,11 @@ describe 'Backup::CLI' do
 
       it 'performs unique models only once, in the order first found' do
         model_a.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_b.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -172,11 +172,11 @@ describe 'Backup::CLI' do
 
       it 'performs unique models only once, in the order first found (wildcard)' do
         model_a.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_b.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
         model_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -190,33 +190,33 @@ describe 'Backup::CLI' do
 
     describe 'failure to prepare for backups' do
       before do
-        Backup::Logger.expects(:configure).in_sequence(s)
-        Backup::Logger.expects(:start!).never
+        SlidayBackup::Logger.expects(:configure).in_sequence(s)
+        SlidayBackup::Logger.expects(:start!).never
         model_a.expects(:perform!).never
         model_b.expects(:perform!).never
-        Backup::Logger.expects(:clear!).never
+        SlidayBackup::Logger.expects(:clear!).never
       end
 
       describe 'when errors are raised while loading config.rb' do
         before do
-          Backup::Config.expects(:load).in_sequence(s).raises('config load error')
+          SlidayBackup::Config.expects(:load).in_sequence(s).raises('config load error')
         end
 
         it 'aborts with status code 3 and logs messages to the console only' do
 
           expectations = [
             Proc.new { |err|
-              err.should be_a(Backup::CLI::Error)
+              err.should be_a(SlidayBackup::CLI::Error)
               err.message.should match(/config load error/)
             },
             Proc.new { |err| err.should be_a(String) }
           ]
-          Backup::Logger.expects(:error).in_sequence(s).times(2).with do |err|
+          SlidayBackup::Logger.expects(:error).in_sequence(s).times(2).with do |err|
             expectation = expectations.shift
             expectation.call(err) if expectation
           end
 
-          Backup::Logger.expects(:abort!).in_sequence(s)
+          SlidayBackup::Logger.expects(:abort!).in_sequence(s)
 
           expect do
             ARGV.replace(
@@ -229,18 +229,18 @@ describe 'Backup::CLI' do
 
       describe 'when no models are found for the given triggers' do
         before do
-          Backup::Config.expects(:load).in_sequence(s)
+          SlidayBackup::Config.expects(:load).in_sequence(s)
         end
 
         it 'aborts and logs messages to the console only' do
-          Backup::Logger.expects(:error).in_sequence(s).with do |err|
-            err.should be_a(Backup::CLI::Error)
+          SlidayBackup::Logger.expects(:error).in_sequence(s).with do |err|
+            err.should be_a(SlidayBackup::CLI::Error)
             err.message.should match(
               /No Models found for trigger\(s\) 'test_trigger_foo'/
             )
           end
 
-          Backup::Logger.expects(:abort!).in_sequence(s)
+          SlidayBackup::Logger.expects(:abort!).in_sequence(s)
 
           expect do
             ARGV.replace(
@@ -259,8 +259,8 @@ describe 'Backup::CLI' do
       let(:notifier_d) { mock }
 
       before do
-        Backup::Config.stubs(:load)
-        Backup::Logger.stubs(:start!)
+        SlidayBackup::Config.stubs(:load)
+        SlidayBackup::Logger.stubs(:start!)
         model_a.stubs(:notifiers).returns([notifier_a, notifier_c])
         model_b.stubs(:notifiers).returns([notifier_b, notifier_d])
       end
@@ -272,12 +272,12 @@ describe 'Backup::CLI' do
         model_a.expects(:perform!).in_sequence(s)
         notifier_a.expects(:perform!).in_sequence(s)
         notifier_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         model_b.expects(:perform!).in_sequence(s)
         notifier_b.expects(:perform!).in_sequence(s)
         notifier_d.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         ARGV.replace(
           ['perform', '-t', 'test_trigger_a,test_trigger_b']
@@ -292,12 +292,12 @@ describe 'Backup::CLI' do
         model_a.expects(:perform!).in_sequence(s)
         notifier_a.expects(:perform!).in_sequence(s)
         notifier_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         model_b.expects(:perform!).in_sequence(s)
         notifier_b.expects(:perform!).in_sequence(s)
         notifier_d.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -314,12 +314,12 @@ describe 'Backup::CLI' do
         model_a.expects(:perform!).in_sequence(s)
         notifier_a.expects(:perform!).in_sequence(s)
         notifier_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         model_b.expects(:perform!).in_sequence(s)
         notifier_b.expects(:perform!).in_sequence(s)
         notifier_d.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -337,7 +337,7 @@ describe 'Backup::CLI' do
         notifier_a.expects(:perform!).in_sequence(s)
         notifier_c.expects(:perform!).in_sequence(s)
 
-        Backup::Logger.expects(:clear!).never
+        SlidayBackup::Logger.expects(:clear!).never
         model_b.expects(:perform!).never
 
         expect do
@@ -355,12 +355,12 @@ describe 'Backup::CLI' do
         model_a.expects(:perform!).in_sequence(s)
         notifier_a.expects(:perform!).in_sequence(s)
         notifier_c.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         model_b.expects(:perform!).in_sequence(s)
         notifier_b.expects(:perform!).in_sequence(s)
         notifier_d.expects(:perform!).in_sequence(s)
-        Backup::Logger.expects(:clear!).in_sequence(s)
+        SlidayBackup::Logger.expects(:clear!).in_sequence(s)
 
         expect do
           ARGV.replace(
@@ -387,7 +387,7 @@ describe 'Backup::CLI' do
 
   describe '#check' do
     it 'fails if errors are raised' do
-      Backup::Config.stubs(:load).raises('an error')
+      SlidayBackup::Config.stubs(:load).raises('an error')
 
       out, err = capture_io do
         ARGV.replace(['check'])
@@ -402,8 +402,8 @@ describe 'Backup::CLI' do
     end
 
     it 'fails if warnings are issued' do
-      Backup::Config.stubs(:load).with do
-        Backup::Logger.warn 'warning message'
+      SlidayBackup::Config.stubs(:load).with do
+        SlidayBackup::Logger.warn 'warning message'
       end
 
       out, err = capture_io do
@@ -419,7 +419,7 @@ describe 'Backup::CLI' do
     end
 
     it 'succeeds if there are no errors or warnings' do
-      Backup::Config.stubs(:load)
+      SlidayBackup::Config.stubs(:load)
 
       out, err = capture_io do
         ARGV.replace(['check'])
@@ -434,10 +434,10 @@ describe 'Backup::CLI' do
 
     it 'uses --config-file if given' do
       # Note: Thor#options is returning a HashWithIndifferentAccess.
-      Backup::Config.expects(:load).with do |options|
+      SlidayBackup::Config.expects(:load).with do |options|
         options[:config_file] == '/my/config.rb'
       end
-      Backup::Logger.stubs(:abort!) # suppress output
+      SlidayBackup::Logger.stubs(:abort!) # suppress output
 
       ARGV.replace(['check', '--config-file', '/my/config.rb'])
       expect do
@@ -536,7 +536,7 @@ describe 'Backup::CLI' do
     context 'when not given a --config-file' do
       it 'should create both a config and a model under the root path' do
         Dir.chdir(@tmpdir) do |path|
-          Backup::Config.send(:update, :root_path => path)
+          SlidayBackup::Config.send(:update, :root_path => path)
           model_file  = File.join(path, 'models', 'test_trigger.rb')
           config_file = File.join(path, 'config.rb')
 
@@ -609,7 +609,7 @@ describe 'Backup::CLI' do
     context 'when not given a --config-file' do
       it 'should create a config file in the root path' do
         Dir.chdir(@tmpdir) do |path|
-          Backup::Config.send(:update, :root_path => path)
+          SlidayBackup::Config.send(:update, :root_path => path)
           config_file = File.join(path, 'config.rb')
 
           out, err = capture_io do
@@ -627,7 +627,7 @@ describe 'Backup::CLI' do
     context 'when a config file already exists' do
       it 'should prompt to overwrite the config file' do
         Dir.chdir(@tmpdir) do |path|
-          Backup::Config.send(:update, :root_path => path)
+          SlidayBackup::Config.send(:update, :root_path => path)
           config_file = File.join(path, 'config.rb')
           FileUtils.mkdir_p(File.dirname(config_file))
           FileUtils.touch(config_file)
@@ -654,7 +654,7 @@ describe 'Backup::CLI' do
         cli.start
       end
       err.should be_empty
-      out.should == "Backup #{ Backup::VERSION }\n"
+      out.should == "SlidayBackup #{ SlidayBackup::VERSION }\n"
     end
 
     specify 'using `backup -v`' do
@@ -663,12 +663,12 @@ describe 'Backup::CLI' do
         cli.start
       end
       err.should be_empty
-      out.should == "Backup #{ Backup::VERSION }\n"
+      out.should == "SlidayBackup #{ SlidayBackup::VERSION }\n"
     end
   end
 
   describe 'Helpers' do
-    let(:helpers) { Backup::CLI::Helpers }
+    let(:helpers) { SlidayBackup::CLI::Helpers }
 
     describe '#overwrite?' do
 

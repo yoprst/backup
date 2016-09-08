@@ -2,40 +2,40 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-describe Backup::Compressor::Custom do
-  let(:compressor) { Backup::Compressor::Custom.new }
+describe SlidayBackup::Compressor::Custom do
+  let(:compressor) { SlidayBackup::Compressor::Custom.new }
 
   before(:all) do
     # Utilities::Helpers#utility will raise an error
     # if the command is invalid or not set
-    Backup::Compressor::Custom.send(
+    SlidayBackup::Compressor::Custom.send(
       :define_method, :utility,
       lambda {|arg| arg.to_s.empty? ? 'error' : "/path/to/#{ arg }" }
     )
   end
 
   it 'should be a subclass of Compressor::Base' do
-    Backup::Compressor::Custom.
-      superclass.should == Backup::Compressor::Base
+    SlidayBackup::Compressor::Custom.
+      superclass.should == SlidayBackup::Compressor::Base
   end
 
   describe '#initialize' do
-    let(:compressor) { Backup::Compressor::Custom.new }
+    let(:compressor) { SlidayBackup::Compressor::Custom.new }
 
-    after { Backup::Compressor::Custom.clear_defaults! }
+    after { SlidayBackup::Compressor::Custom.clear_defaults! }
 
     it 'should load pre-configured defaults' do
-      Backup::Compressor::Custom.any_instance.expects(:load_defaults!)
+      SlidayBackup::Compressor::Custom.any_instance.expects(:load_defaults!)
       compressor
     end
 
     it 'should call Utilities::Helpers#utility to validate command' do
-      Backup::Compressor::Custom.any_instance.expects(:utility)
+      SlidayBackup::Compressor::Custom.any_instance.expects(:utility)
       compressor
     end
 
     it 'should clean the command and extension for use with compress_with' do
-      compressor = Backup::Compressor::Custom.new do |c|
+      compressor = SlidayBackup::Compressor::Custom.new do |c|
         c.command   = ' my_command --option foo '
         c.extension = ' my_extension '
       end
@@ -60,7 +60,7 @@ describe Backup::Compressor::Custom do
       end
 
       it 'should use the values given' do
-        compressor = Backup::Compressor::Custom.new do |c|
+        compressor = SlidayBackup::Compressor::Custom.new do |c|
           c.command   = 'my_command'
           c.extension = 'my_extension'
         end
@@ -75,7 +75,7 @@ describe Backup::Compressor::Custom do
 
     context 'when pre-configured defaults have been set' do
       before do
-        Backup::Compressor::Custom.defaults do |c|
+        SlidayBackup::Compressor::Custom.defaults do |c|
           c.command   = 'default_command'
           c.extension = 'default_extension'
         end
@@ -90,7 +90,7 @@ describe Backup::Compressor::Custom do
       end
 
       it 'should override pre-configured defaults' do
-        compressor = Backup::Compressor::Custom.new do |c|
+        compressor = SlidayBackup::Compressor::Custom.new do |c|
           c.command   = 'new_command'
           c.extension = 'new_extension'
         end

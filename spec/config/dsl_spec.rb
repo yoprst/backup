@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Config::DSL do
 
   describe '.add_dsl_constants' do
@@ -12,7 +12,7 @@ describe Config::DSL do
       end
       described_class.constants.should be_empty
 
-      load File.expand_path('../../../lib/backup/config/dsl.rb', __FILE__)
+      load File.expand_path('../../../lib/sliday_backup/config/dsl.rb', __FILE__)
 
       expect( described_class.const_defined?('MySQL') ).to be_true
       expect( described_class.const_defined?('RSync') ).to be_true
@@ -66,8 +66,8 @@ describe Config::DSL do
 
   describe '#preconfigure' do
     after do
-      if described_class.const_defined?('MyBackup')
-        described_class.send(:remove_const, 'MyBackup')
+      if described_class.const_defined?('MySlidayBackup')
+        described_class.send(:remove_const, 'MySlidayBackup')
       end
     end
 
@@ -79,11 +79,11 @@ describe Config::DSL do
 
     specify 'name must begin with a capital letter' do
       expect do
-        subject.preconfigure('myBackup')
+        subject.preconfigure('mySlidayBackup')
       end.to raise_error(described_class::Error)
     end
 
-    specify 'Backup::Model may not be preconfigured' do
+    specify 'SlidayBackup::Model may not be preconfigured' do
       expect do
         subject.preconfigure('Model')
       end.to raise_error(described_class::Error)
@@ -91,12 +91,12 @@ describe Config::DSL do
 
     specify 'preconfigured models can only be preconfigured once' do
       block = Proc.new {}
-      subject.preconfigure('MyBackup', &block)
-      klass = described_class.const_get('MyBackup')
-      klass.superclass.should == Backup::Model
+      subject.preconfigure('MySlidayBackup', &block)
+      klass = described_class.const_get('MySlidayBackup')
+      klass.superclass.should == SlidayBackup::Model
 
       expect do
-        subject.preconfigure('MyBackup', &block)
+        subject.preconfigure('MySlidayBackup', &block)
       end.to raise_error(described_class::Error)
     end
   end

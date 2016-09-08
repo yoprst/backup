@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Database::Riak do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:db) { Database::Riak.new(model) }

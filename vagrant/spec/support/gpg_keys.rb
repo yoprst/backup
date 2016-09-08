@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module BackupSpec
+module SlidayBackupSpec
   GPGKeys = Hash.new {|h,k| h[k] = {} }
 
   GPGKeys[:backup01][:long_id] = '8F5D150616325C61'

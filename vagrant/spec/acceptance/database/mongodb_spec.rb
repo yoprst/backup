@@ -2,14 +2,14 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Database::MongoDB' do
 
   describe 'Single Database' do
 
     specify 'All collections' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB do |db|
             db.name = 'backup_test_01'
           end
@@ -40,7 +40,7 @@ describe 'Database::MongoDB' do
 
     specify 'All collections with compression' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB do |db|
             db.name = 'backup_test_01'
           end
@@ -72,7 +72,7 @@ describe 'Database::MongoDB' do
 
     specify 'All collections, locking the database' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB do |db|
             db.name = 'backup_test_01'
             db.lock = true
@@ -108,7 +108,7 @@ describe 'Database::MongoDB' do
 
     specify 'All collections' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB
           store_with Local
         end
@@ -145,7 +145,7 @@ describe 'Database::MongoDB' do
 
     specify 'All collections, locking the database' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB do |db|
             db.lock = true
           end
@@ -188,7 +188,7 @@ describe 'Database::MongoDB' do
 
     specify 'All collections' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           database MongoDB, :dump_01 do |db|
             db.name = 'backup_test_01'
           end

@@ -2,7 +2,7 @@
 
 require File.expand_path('../../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::RSync::Push do
   before do
     Syncer::RSync::Push.any_instance.
@@ -92,7 +92,7 @@ describe Syncer::RSync::Push do
 
     context 'when pre-configured defaults have been set' do
       before do
-        Backup::Syncer::RSync::Push.defaults do |rsync|
+        SlidayBackup::Syncer::RSync::Push.defaults do |rsync|
           rsync.mode            = :default_mode
           rsync.host            = 'default_host'
           rsync.port            = 456

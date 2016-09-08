@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Logger::Console do
   let(:timestamp) { Time.now.utc.strftime("%Y/%m/%d %H:%M:%S") }
 

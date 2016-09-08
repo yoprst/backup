@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
   describe Notifier::Ses do
     let(:model) { Model.new(:test_trigger, 'test label') }
     let(:notifier) { Notifier::Ses.new(model) }
@@ -62,8 +62,8 @@ module Backup
       context 'when status is :success' do
         it 'sends a success message' do
           fake_ses.expects(:send_raw_email).once.with{ |mail|
-            expect(mail.subject).to eq('[Backup::Success] test label (test_trigger)')
-            expect(mail.body.raw_source).to match_regex('Backup Completed Successfully!')
+            expect(mail.subject).to eq('[SlidayBackup::Success] test label (test_trigger)')
+            expect(mail.body.raw_source).to match_regex('SlidayBackup Completed Successfully!')
           }
 
           notifier.send(:notify!, :success)
@@ -73,7 +73,7 @@ module Backup
       context 'when status is :warning' do
         it 'sends a warning message' do
           fake_ses.expects(:send_raw_email).once.with{ |mail|
-            expect(mail.subject).to eq('[Backup::Warning] test label (test_trigger)')
+            expect(mail.subject).to eq('[SlidayBackup::Warning] test label (test_trigger)')
             expect(mail.parts[0].body.raw_source).to match_regex('with Warnings')
             expect(mail.attachments[0].filename).to match_regex('log')
           }
@@ -85,8 +85,8 @@ module Backup
       context 'when status is :failure' do
         it 'sends a failure message' do
           fake_ses.expects(:send_raw_email).once.with{ |mail|
-            expect(mail.subject).to eq('[Backup::Failure] test label (test_trigger)')
-            expect(mail.parts[0].body.raw_source).to match_regex('Backup Failed!')
+            expect(mail.subject).to eq('[SlidayBackup::Failure] test label (test_trigger)')
+            expect(mail.parts[0].body.raw_source).to match_regex('SlidayBackup Failed!')
             expect(mail.attachments[0].filename).to match_regex('log')
           }
 

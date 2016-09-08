@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 shared_examples 'a subclass of Storage::Base' do
-  let(:storage_name) { described_class.name.sub('Backup::', '') }
+  let(:storage_name) { described_class.name.sub('SlidayBackup::', '') }
 
   describe '#initialize' do
 
@@ -30,10 +30,10 @@ shared_examples 'a subclass of Storage::Base' do
     # Note that using `storage.expects(:cycle!).never` will cause
     # respond_to?(:cycle!) to return true in Storage#perform! for RSync.
     specify 'does not cycle if keep is not set' do
-      Backup::Logger.expects(:info).with("#{ storage_name } Started...")
+      SlidayBackup::Logger.expects(:info).with("#{ storage_name } Started...")
       storage.expects(:transfer!)
       storage.expects(:cycle!).never
-      Backup::Logger.expects(:info).with("#{ storage_name } Finished!")
+      SlidayBackup::Logger.expects(:info).with("#{ storage_name } Finished!")
 
       storage.perform!
     end
@@ -43,9 +43,9 @@ shared_examples 'a subclass of Storage::Base' do
         block = respond_to?(:required_config) ? required_config : Proc.new {}
         storage = described_class.new(model, :my_id, &block)
 
-        Backup::Logger.expects(:info).with("#{ storage_name } (my_id) Started...")
+        SlidayBackup::Logger.expects(:info).with("#{ storage_name } (my_id) Started...")
         storage.expects(:transfer!)
-        Backup::Logger.expects(:info).with("#{ storage_name } (my_id) Finished!")
+        SlidayBackup::Logger.expects(:info).with("#{ storage_name } (my_id) Finished!")
 
         storage.perform!
       end
@@ -56,12 +56,12 @@ shared_examples 'a subclass of Storage::Base' do
 end
 
 shared_examples 'a storage that cycles' do
-  let(:storage_name) { described_class.name.sub('Backup::', '') }
+  let(:storage_name) { described_class.name.sub('SlidayBackup::', '') }
 
   shared_examples 'storage cycling' do
-    let(:pkg_a) { Backup::Package.new(model) }
-    let(:pkg_b) { Backup::Package.new(model) }
-    let(:pkg_c) { Backup::Package.new(model) }
+    let(:pkg_a) { SlidayBackup::Package.new(model) }
+    let(:pkg_b) { SlidayBackup::Package.new(model) }
+    let(:pkg_c) { SlidayBackup::Package.new(model) }
 
     before do
       storage.package.time = Time.now
@@ -143,8 +143,8 @@ shared_examples 'a storage that cycles' do
       storage.expects(:remove!).with(pkg_c)
 
       pkg_b.stubs(:filenames).returns(['file1', 'file2'])
-      Backup::Logger.expects(:warn).with do |err|
-        expect( err ).to be_an_instance_of Backup::Storage::Cycler::Error
+      SlidayBackup::Logger.expects(:warn).with do |err|
+        expect( err ).to be_an_instance_of SlidayBackup::Storage::Cycler::Error
         expect( err.message ).to include(
           "There was a problem removing the following package:\n" +
           "  Trigger: test_trigger :: Dated: #{ pkg_b.time }\n" +
@@ -171,7 +171,7 @@ shared_examples 'a storage that cycles' do
       block = respond_to?(:required_config) ? required_config : Proc.new {}
       described_class.new(model, :my_id, &block)
     }
-    let(:yaml_file) { File.join(Backup::Config.data_path, 'test_trigger',
+    let(:yaml_file) { File.join(SlidayBackup::Config.data_path, 'test_trigger',
                                 "#{ storage_name.split('::').last }-my_id.yml") }
 
     before { storage.keep = '2' } # value is typecast
@@ -179,14 +179,14 @@ shared_examples 'a storage that cycles' do
   end
 
   context 'without a storage_id' do
-    let(:yaml_file) { File.join(Backup::Config.data_path, 'test_trigger',
+    let(:yaml_file) { File.join(SlidayBackup::Config.data_path, 'test_trigger',
                                 "#{ storage_name.split('::').last }.yml") }
     before { storage.keep = 2 }
     include_examples 'storage cycling'
   end
 
   context 'keep as a Time' do
-    let(:yaml_file) { File.join(Backup::Config.data_path, 'test_trigger',
+    let(:yaml_file) { File.join(SlidayBackup::Config.data_path, 'test_trigger',
                                 "#{ storage_name.split('::').last }.yml") }
     before { storage.keep = Time.now - 11 }
     include_examples 'storage cycling'

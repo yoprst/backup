@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
   describe Notifier::Zabbix do
     let(:model) { Model.new(:test_trigger, 'test label') }
     let(:notifier) { Notifier::Zabbix.new(model) }
@@ -19,7 +19,7 @@ module Backup
       it 'provides default values' do
         expect( notifier.zabbix_host  ).to eq 'zabbix.hostname'
         expect( notifier.zabbix_port  ).to be 10051
-        expect( notifier.service_name ).to eq 'Backup test_trigger'
+        expect( notifier.service_name ).to eq 'SlidayBackup test_trigger'
         expect( notifier.service_host ).to eq 'zabbix.hostname'
         expect( notifier.item_key     ).to eq 'backup_status'
 
@@ -68,8 +68,8 @@ module Backup
 
       context 'when status is :success' do
         let(:zabbix_msg) {
-          "my.service.host\tBackup test_trigger\t0\t"\
-          "[Backup::Success] test label (test_trigger)"
+          "my.service.host\tSlidayBackup test_trigger\t0\t"\
+          "[SlidayBackup::Success] test label (test_trigger)"
         }
 
         let(:zabbix_cmd) {
@@ -90,8 +90,8 @@ module Backup
 
       context 'when status is :warning' do
         let(:zabbix_msg) {
-          "my.service.host\tBackup test_trigger\t1\t"\
-          "[Backup::Warning] test label (test_trigger)"
+          "my.service.host\tSlidayBackup test_trigger\t1\t"\
+          "[SlidayBackup::Warning] test label (test_trigger)"
         }
 
         let(:zabbix_cmd) {
@@ -112,8 +112,8 @@ module Backup
 
       context 'when status is :failure' do
         let(:zabbix_msg) {
-          "my.service.host\tBackup test_trigger\t2\t"\
-          "[Backup::Failure] test label (test_trigger)"
+          "my.service.host\tSlidayBackup test_trigger\t2\t"\
+          "[SlidayBackup::Failure] test label (test_trigger)"
         }
 
         let(:zabbix_cmd) {

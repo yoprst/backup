@@ -5,10 +5,10 @@ task :tasklist do
   exec 'rake -T'
 end
 
-desc 'Open a pry console in the Backup context'
+desc 'Open a pry console in the SlidayBackup context'
 task :console do
   require 'pry'
-  require 'backup'
+  require 'sliday_backup'
   ARGV.clear
   Pry.start || exit
 end
@@ -55,14 +55,14 @@ task :release => :gemspec do
     EOS
   end
 
-  lines = File.readlines('lib/backup/version.rb')
+  lines = File.readlines('lib/sliday_backup/version.rb')
   current = lines.select {|line| line =~ /^  VERSION/ }[0].match(/'(.*)'/)[1]
   print "Current Version: #{ current }\nEnter New Version: "
   version = $stdin.gets.chomp
 
   abort 'Invalid Version' unless version =~ /^\d+\.\d+\.\d+$/
 
-  File.open('lib/backup/version.rb', 'w') do |file|
+  File.open('lib/sliday_backup/version.rb', 'w') do |file|
     lines.each do |line|
       if line =~ /^  VERSION/
         file.puts "  VERSION = '#{ version }'"
@@ -72,7 +72,7 @@ task :release => :gemspec do
     end
   end
 
-  puts `git commit -m 'Release v#{ version } [ci skip]' lib/backup/version.rb`
+  puts `git commit -m 'Release v#{ version } [ci skip]' lib/sliday_backup/version.rb`
   `git tag #{ version }`
   exec 'gem build backup.gemspec'
 end

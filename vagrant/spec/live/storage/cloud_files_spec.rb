@@ -9,9 +9,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 #   backup.testing.container
 #   backup.testing.segments.container
 #
-module Backup
+module SlidayBackup
 describe Storage::CloudFiles,
-    :if => BackupSpec::LIVE['storage']['cloudfiles']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['storage']['cloudfiles']['specs_enabled'] == true do
 
   before { clean_remote }
   after  { clean_remote }
@@ -23,7 +23,7 @@ describe Storage::CloudFiles,
 
   it 'stores package', :live do
     create_model :my_backup, %q{
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 6 # MiB
 
         6.times do |n|
@@ -32,7 +32,7 @@ describe Storage::CloudFiles,
           end
         end
 
-        config = BackupSpec::LIVE['storage']['cloudfiles']
+        config = SlidayBackupSpec::LIVE['storage']['cloudfiles']
         store_with CloudFiles do |cf|
           cf.username           = config['username']
           cf.api_key            = config['api_key']
@@ -66,7 +66,7 @@ describe Storage::CloudFiles,
 
   it 'cycles package', :live do
     create_model :my_backup, %q{
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 6 # MiB
 
         6.times do |n|
@@ -75,7 +75,7 @@ describe Storage::CloudFiles,
           end
         end
 
-        config = BackupSpec::LIVE['storage']['cloudfiles']
+        config = SlidayBackupSpec::LIVE['storage']['cloudfiles']
         store_with CloudFiles do |cf|
           cf.username           = config['username']
           cf.api_key            = config['api_key']
@@ -148,7 +148,7 @@ describe Storage::CloudFiles,
   private
 
   def config
-    config = BackupSpec::LIVE['storage']['cloudfiles']
+    config = SlidayBackupSpec::LIVE['storage']['cloudfiles']
     @config ||= {
       :username           => config['username'],
       :api_key            => config['api_key'],
@@ -180,7 +180,7 @@ describe Storage::CloudFiles,
   end
 
   def remote_path_for(job)
-    path = BackupSpec::LIVE['storage']['cloudfiles']['path']
+    path = SlidayBackupSpec::LIVE['storage']['cloudfiles']['path']
     package = job.model.package
     File.join(path, package.trigger, package.time)
   end
@@ -196,7 +196,7 @@ describe Storage::CloudFiles,
   end
 
   def clean_remote
-    path = BackupSpec::LIVE['storage']['cloudfiles']['path']
+    path = SlidayBackupSpec::LIVE['storage']['cloudfiles']['path']
     objects = cloud_io.objects(path)
     unless objects.empty?
       slo_objects, objects = objects.partition(&:slo?)

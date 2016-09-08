@@ -2,13 +2,13 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Storage::RSync do
 
   context 'using local operation' do
     specify 'single package file' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :my_archive do |archive|
             archive.add '~/test_data'
           end
@@ -32,7 +32,7 @@ describe Storage::RSync do
 
     specify 'multiple package files' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           split_into_chunks_of 1 # 1MB
 
           archive :my_archive do |archive|
@@ -60,7 +60,7 @@ describe Storage::RSync do
   context 'using :ssh mode' do
     specify 'single package file' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :my_archive do |archive|
             archive.add '~/test_data'
           end
@@ -85,7 +85,7 @@ describe Storage::RSync do
 
     specify 'multiple package files' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           split_into_chunks_of 1 # 1MB
 
           archive :my_archive do |archive|
@@ -118,13 +118,13 @@ describe Storage::RSync do
       # only a module name would be used which would specify a directory
       # that already exists in which to store the backup package file(s).
       # But we need to use ~/Storage, which we remove before each spec example.
-      FileUtils.mkdir BackupSpec::LOCAL_STORAGE_PATH
+      FileUtils.mkdir SlidayBackupSpec::LOCAL_STORAGE_PATH
     end
 
     context 'using :ssh_daemon mode' do
       specify 'single package file' do
         create_model :my_backup, <<-EOS
-          Backup::Model.new(:my_backup, 'a description') do
+          SlidayBackup::Model.new(:my_backup, 'a description') do
             archive :my_archive do |archive|
               archive.add '~/test_data'
             end
@@ -150,7 +150,7 @@ describe Storage::RSync do
 
       specify 'multiple package files' do
         create_model :my_backup, <<-EOS
-          Backup::Model.new(:my_backup, 'a description') do
+          SlidayBackup::Model.new(:my_backup, 'a description') do
             split_into_chunks_of 1 # 1MB
 
             archive :my_archive do |archive|
@@ -180,7 +180,7 @@ describe Storage::RSync do
     context 'using :rsync_daemon mode' do
       specify 'single package file' do
         create_model :my_backup, <<-EOS
-          Backup::Model.new(:my_backup, 'a description') do
+          SlidayBackup::Model.new(:my_backup, 'a description') do
             archive :my_archive do |archive|
               archive.add '~/test_data'
             end
@@ -207,7 +207,7 @@ describe Storage::RSync do
 
       specify 'multiple package files' do
         create_model :my_backup, <<-EOS
-          Backup::Model.new(:my_backup, 'a description') do
+          SlidayBackup::Model.new(:my_backup, 'a description') do
             split_into_chunks_of 1 # 1MB
 
             archive :my_archive do |archive|

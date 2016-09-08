@@ -2,14 +2,14 @@
 
 require File.expand_path('../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Archive do
 
   shared_examples 'GNU or BSD tar' do
 
     specify 'All directories, no compression, with/without :root' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :archive_a do |archive|
             archive.add '~/test_data'
           end
@@ -71,7 +71,7 @@ describe Archive do
 
     specify 'Specific directories, with compression, with/without :root' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :archive_a do |archive|
             archive.add '~/test_data/dir_a/'
             archive.add '~/test_data/dir_b'
@@ -124,7 +124,7 @@ describe Archive do
 
     specify 'Excluded directories, with compression, with/without :root' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :archive_a do |archive|
             archive.add '~/test_data'
             archive.exclude '~/test_data/dir_a/'
@@ -179,7 +179,7 @@ describe Archive do
 
     specify 'Using Splitter' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           split_into_chunks_of 1 # 1MB
 
           archive :my_archive do |archive|
@@ -219,7 +219,7 @@ describe Archive do
 
     specify 'Using sudo' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :my_archive do |archive|
             archive.use_sudo
             archive.add '~/test_root_data'
@@ -254,14 +254,14 @@ describe Archive do
 
     it 'detects GNU tar' do
       create_config <<-EOS
-        Backup::Utilities.configure do
+        SlidayBackup::Utilities.configure do
           tar '/usr/bin/tar'
           tar_dist nil
         end
       EOS
 
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :my_archive do |archive|
             archive.add '~/test_data/dir_a'
           end
@@ -282,7 +282,7 @@ describe Archive do
       # tar_dist must be set, since the default config.rb
       # will set this to :gnu to suppress the detection messages.
       create_config <<-EOS
-        Backup::Utilities.configure do
+        SlidayBackup::Utilities.configure do
           tar '/usr/bin/bsdtar'
           tar_dist :bsd
         end
@@ -293,14 +293,14 @@ describe Archive do
 
     it 'detects BSD tar' do
       create_config <<-EOS
-        Backup::Utilities.configure do
+        SlidayBackup::Utilities.configure do
           tar '/usr/bin/bsdtar'
           tar_dist nil
         end
       EOS
 
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           archive :my_archive do |archive|
             archive.add '~/test_data/dir_a'
           end

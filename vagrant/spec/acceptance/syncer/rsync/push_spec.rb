@@ -2,13 +2,13 @@
 
 require File.expand_path('../../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::RSync::Push do
 
   context 'using :ssh mode' do
     specify 'single directory' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.host = 'localhost'
             rsync.path = '~/Storage'
@@ -30,7 +30,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.host = 'localhost'
             rsync.path = '~/Storage'
@@ -58,7 +58,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories with excludes' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.host = 'localhost'
             rsync.path = '~/Storage'
@@ -92,7 +92,7 @@ describe Syncer::RSync::Push do
   context 'using :ssh_daemon mode' do
     specify 'single directory' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :ssh_daemon
             rsync.host = 'localhost'
@@ -115,7 +115,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :ssh_daemon
             rsync.host = 'localhost'
@@ -144,7 +144,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories with excludes' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :ssh_daemon
             rsync.host = 'localhost'
@@ -179,7 +179,7 @@ describe Syncer::RSync::Push do
   context 'using :rsync_daemon mode' do
     specify 'single directory' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :rsync_daemon
             rsync.host = 'localhost'
@@ -203,7 +203,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :rsync_daemon
             rsync.host = 'localhost'
@@ -233,7 +233,7 @@ describe Syncer::RSync::Push do
 
     specify 'multiple directories with excludes' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
+        SlidayBackup::Model.new(:my_backup, 'a description') do
           sync_with RSync::Push do |rsync|
             rsync.mode = :rsync_daemon
             rsync.host = 'localhost'

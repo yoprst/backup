@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-module BackupSpec
+module SlidayBackupSpec
   class TarFile
-    include Backup::Utilities::Helpers
+    include SlidayBackup::Utilities::Helpers
 
     attr_reader :path
 

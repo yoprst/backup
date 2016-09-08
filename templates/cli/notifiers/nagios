@@ -8,6 +8,6 @@
 
     nagios.nagios_host  = 'nagioshost'
     nagios.nagios_port  = 5667
-    nagios.service_name = 'My Backup'
+    nagios.service_name = 'My SlidayBackup'
     nagios.service_host = 'backuphost'
   end

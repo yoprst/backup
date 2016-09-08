@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Storage::Dropbox do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:storage) { Storage::Dropbox.new(model) }
@@ -128,7 +128,7 @@ describe Storage::Dropbox do
       File.expects(:exist?).with(cached_file).returns(true)
       File.expects(:read).with(cached_file).returns('yaml_data')
       DropboxSession.expects(:deserialize).with('yaml_data').returns(session)
-      Backup::Logger.expects(:info).with('Session data loaded from cache!')
+      SlidayBackup::Logger.expects(:info).with('Session data loaded from cache!')
 
       storage.send(:cached_session).should be(session)
     end

@@ -8,7 +8,7 @@ notify_by Zabbix do |zabbix|
 
     zabbix.zabbix_host  = "zabbix_server_hostname"
     zabbix.zabbix_port  = 10051
-    zabbix.service_name = "Backup trigger"
+    zabbix.service_name = "SlidayBackup trigger"
     zabbix.service_host = "zabbix_host"
     zabbix.item_key     = "backup_status"
   end

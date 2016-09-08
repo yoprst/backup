@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
   describe Notifier::DataDog do
     let(:model) { Model.new(:test_trigger, 'test label') }
     let(:notifier) { Notifier::DataDog.new(model) }
@@ -14,7 +14,7 @@ module Backup
     describe '#initialize' do
       it 'provides default values' do
         expect( notifier.api_key          ).to be_nil
-        expect( notifier.title            ).to eq 'Backup test label'
+        expect( notifier.title            ).to eq 'SlidayBackup test label'
         expect( notifier.date_happened    ).to be_nil
         expect( notifier.priority         ).to be_nil
         expect( notifier.host             ).to be_nil
@@ -32,7 +32,7 @@ module Backup
       it 'configures the notifier' do
         notifier = Notifier::DataDog.new(model) do |datadog|
           datadog.api_key          = 'my_key'
-          datadog.title            = 'Backup!'
+          datadog.title            = 'SlidayBackup!'
           datadog.date_happened    = 12345
           datadog.priority         = 'low'
           datadog.host             = 'local'
@@ -48,7 +48,7 @@ module Backup
         end
 
         expect( notifier.api_key          ).to eq 'my_key'
-        expect( notifier.title            ).to eq 'Backup!'
+        expect( notifier.title            ).to eq 'SlidayBackup!'
         expect( notifier.date_happened    ).to eq 12345
         expect( notifier.priority         ).to eq 'low'
         expect( notifier.host             ).to eq 'local'
@@ -80,8 +80,8 @@ module Backup
             with('my_token').returns(client)
           Dogapi::Event.expects(:new).in_sequence(s).
             with(
-              '[Backup::Success] test label (test_trigger)',
-              {:msg_title => 'Backup test label', :alert_type => 'success'}
+              '[SlidayBackup::Success] test label (test_trigger)',
+              {:msg_title => 'SlidayBackup test label', :alert_type => 'success'}
             ).returns(event)
           client.expects(:emit_event).in_sequence(s).
             with(event)
@@ -96,8 +96,8 @@ module Backup
             with('my_token').returns(client)
           Dogapi::Event.expects(:new).in_sequence(s).
             with(
-              '[Backup::Warning] test label (test_trigger)',
-              {:msg_title => 'Backup test label', :alert_type => 'warning'}
+              '[SlidayBackup::Warning] test label (test_trigger)',
+              {:msg_title => 'SlidayBackup test label', :alert_type => 'warning'}
             ).returns(event)
           client.expects(:emit_event).in_sequence(s).
             with(event)
@@ -112,8 +112,8 @@ module Backup
             with('my_token').returns(client)
           Dogapi::Event.expects(:new).in_sequence(s).
             with(
-              '[Backup::Failure] test label (test_trigger)',
-               {:msg_title => 'Backup test label', :alert_type => 'error'}
+              '[SlidayBackup::Failure] test label (test_trigger)',
+               {:msg_title => 'SlidayBackup test label', :alert_type => 'error'}
             ).returns(event)
           client.expects(:emit_event).in_sequence(s).
             with(event)

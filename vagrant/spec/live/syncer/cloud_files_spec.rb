@@ -9,9 +9,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 #   backup.testing.container
 #
 # Note: Expectations will occasionally fail due to eventual consistency.
-module Backup
+module SlidayBackup
 describe Syncer::Cloud::CloudFiles,
-    :if => BackupSpec::LIVE['syncer']['cloud']['cloudfiles']['specs_enabled'] == true do
+    :if => SlidayBackupSpec::LIVE['syncer']['cloud']['cloudfiles']['specs_enabled'] == true do
 
   before { prepare_local_sync_files; clean_remote }
   after  { clean_remote }
@@ -20,8 +20,8 @@ describe Syncer::Cloud::CloudFiles,
 
     it 'works' do
       create_model :my_backup, <<-EOS
-        Backup::Model.new(:my_backup, 'a description') do
-          config = BackupSpec::LIVE['syncer']['cloud']['cloudfiles']
+        SlidayBackup::Model.new(:my_backup, 'a description') do
+          config = SlidayBackupSpec::LIVE['syncer']['cloud']['cloudfiles']
           sync_with Cloud::CloudFiles do |cf|
             cf.username     = config['username']
             cf.api_key      = config['api_key']
@@ -34,8 +34,8 @@ describe Syncer::Cloud::CloudFiles,
             cf.mirror       = #{ mirror }
 
             cf.directories do
-              add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_a')
-              add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_b')
+              add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_a')
+              add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_b')
             end
           end
         end
@@ -94,8 +94,8 @@ describe Syncer::Cloud::CloudFiles,
 
   it 'excludes files', :live do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
-        config = BackupSpec::LIVE['syncer']['cloud']['cloudfiles']
+      SlidayBackup::Model.new(:my_backup, 'a description') do
+        config = SlidayBackupSpec::LIVE['syncer']['cloud']['cloudfiles']
         sync_with Cloud::CloudFiles do |cf|
           cf.username     = config['username']
           cf.api_key      = config['api_key']
@@ -106,8 +106,8 @@ describe Syncer::Cloud::CloudFiles,
           cf.path         = config['path']
 
           cf.directories do
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_a')
-            add File.join(BackupSpec::LOCAL_SYNC_PATH, 'dir_b')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_a')
+            add File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, 'dir_b')
             exclude '**/two.*'
             exclude /three\.file$/
           end
@@ -127,7 +127,7 @@ describe Syncer::Cloud::CloudFiles,
   private
 
   def cloud_io
-    config = BackupSpec::LIVE['syncer']['cloud']['cloudfiles']
+    config = SlidayBackupSpec::LIVE['syncer']['cloud']['cloudfiles']
     @cloud_io ||= CloudIO::CloudFiles.new(
       :username           => config['username'],
       :api_key            => config['api_key'],
@@ -144,7 +144,7 @@ describe Syncer::Cloud::CloudFiles,
   end
 
   def remote_path
-    BackupSpec::LIVE['syncer']['cloud']['cloudfiles']['path']
+    SlidayBackupSpec::LIVE['syncer']['cloud']['cloudfiles']['path']
   end
 
   def objects_on_remote
@@ -173,7 +173,7 @@ describe Syncer::Cloud::CloudFiles,
 
   def skipped_file_logged?(job)
     messages = job.logger.messages.map {|m| m.formatted_lines }.flatten
-    file = File.join(BackupSpec::LOCAL_SYNC_PATH, "dir_b/bad\uFFFDfile")
+    file = File.join(SlidayBackupSpec::LOCAL_SYNC_PATH, "dir_b/bad\uFFFDfile")
     messages.any? {|line| line.include? "[warn]   [skipping] #{ file }" }
   end
 

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-module BackupSpec
+module SlidayBackupSpec
   class Package
-    include Backup::Utilities::Helpers
+    include SlidayBackup::Utilities::Helpers
     extend Forwardable
     def_delegators :tarfile, :manifest, :contents, :[]
 

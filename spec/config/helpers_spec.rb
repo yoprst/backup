@@ -2,11 +2,11 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe 'Config::Helpers' do
 
   before do
-    module ::Backup
+    module ::SlidayBackup
       class Foo
         include Config::Helpers
         attr_accessor :accessor, :accessor_two
@@ -38,7 +38,7 @@ describe 'Config::Helpers' do
   end
 
   after do
-    Backup.send(:remove_const, 'Foo')
+    SlidayBackup.send(:remove_const, 'Foo')
   end
 
   describe '.defaults' do
@@ -130,7 +130,7 @@ describe 'Config::Helpers' do
         Logger.expects(:warn).with do |err|
           err.message.should ==
               "Config::Error: [DEPRECATION WARNING]\n" +
-              "  Backup::Foo#removed has been deprecated as of backup v.1.1"
+              "  SlidayBackup::Foo#removed has been deprecated as of backup v.1.1"
         end
 
         deprecation = Foo.deprecations[:removed]
@@ -143,7 +143,7 @@ describe 'Config::Helpers' do
         Logger.expects(:warn).with do |err|
           err.message.should ==
               "Config::Error: [DEPRECATION WARNING]\n" +
-              "  Backup::Foo#removed_with_message has been deprecated " +
+              "  SlidayBackup::Foo#removed_with_message has been deprecated " +
               "as of backup v.1.2\n" +
               "  This has no replacement."
         end
@@ -187,7 +187,7 @@ describe 'Config::Helpers' do
 
       expect do
         klass.send(:load_defaults!)
-      end.to raise_error(NoMethodError, /Backup::Foo/)
+      end.to raise_error(NoMethodError, /SlidayBackup::Foo/)
     end
 
     it 'should raise an error if defaults were set for invalid accessors' do
@@ -197,7 +197,7 @@ describe 'Config::Helpers' do
 
       expect do
         klass.send(:load_defaults!)
-      end.to raise_error(NoMethodError, /Backup::Foo/)
+      end.to raise_error(NoMethodError, /SlidayBackup::Foo/)
     end
   end
 

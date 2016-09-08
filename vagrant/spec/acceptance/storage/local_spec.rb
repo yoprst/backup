@@ -2,12 +2,12 @@
 
 require File.expand_path('../../../spec_helper', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Storage::Local do
 
   it 'cycles stored packages' do
     create_model :my_backup, <<-EOS
-      Backup::Model.new(:my_backup, 'a description') do
+      SlidayBackup::Model.new(:my_backup, 'a description') do
         split_into_chunks_of 1 # 1MB
 
         archive :my_archive do |archive|

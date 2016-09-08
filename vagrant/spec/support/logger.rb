@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Backup
+module SlidayBackup
   class Logger
     class << self
 

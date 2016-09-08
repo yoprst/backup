@@ -2,9 +2,9 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-describe Backup::Encryptor::OpenSSL do
+describe SlidayBackup::Encryptor::OpenSSL do
   let(:encryptor) do
-    Backup::Encryptor::OpenSSL.new do |e|
+    SlidayBackup::Encryptor::OpenSSL.new do |e|
       e.password      = 'mypassword'
       e.password_file = '/my/password/file'
       e.base64        = true
@@ -13,15 +13,15 @@ describe Backup::Encryptor::OpenSSL do
   end
 
   it 'should be a subclass of Encryptor::Base' do
-    Backup::Encryptor::OpenSSL.
-      superclass.should == Backup::Encryptor::Base
+    SlidayBackup::Encryptor::OpenSSL.
+      superclass.should == SlidayBackup::Encryptor::Base
   end
 
   describe '#initialize' do
-    after { Backup::Encryptor::OpenSSL.clear_defaults! }
+    after { SlidayBackup::Encryptor::OpenSSL.clear_defaults! }
 
     it 'should load pre-configured defaults' do
-      Backup::Encryptor::OpenSSL.any_instance.expects(:load_defaults!)
+      SlidayBackup::Encryptor::OpenSSL.any_instance.expects(:load_defaults!)
       encryptor
     end
 
@@ -34,7 +34,7 @@ describe Backup::Encryptor::OpenSSL do
       end
 
       it 'should use default values if none are given' do
-        encryptor = Backup::Encryptor::OpenSSL.new
+        encryptor = SlidayBackup::Encryptor::OpenSSL.new
         encryptor.password.should       be_nil
         encryptor.password_file.should  be_nil
         encryptor.base64.should         be_false
@@ -44,7 +44,7 @@ describe Backup::Encryptor::OpenSSL do
 
     context 'when pre-configured defaults have been set' do
       before do
-        Backup::Encryptor::OpenSSL.defaults do |e|
+        SlidayBackup::Encryptor::OpenSSL.defaults do |e|
           e.password      = 'default_password'
           e.password_file = '/default/password/file'
           e.base64        = 'default_base64'
@@ -53,7 +53,7 @@ describe Backup::Encryptor::OpenSSL do
       end
 
       it 'should use pre-configured defaults' do
-        encryptor = Backup::Encryptor::OpenSSL.new
+        encryptor = SlidayBackup::Encryptor::OpenSSL.new
         encryptor.password      = 'default_password'
         encryptor.password_file = '/default/password/file'
         encryptor.base64        = 'default_base64'
@@ -83,7 +83,7 @@ describe Backup::Encryptor::OpenSSL do
   end
 
   describe '#options' do
-    let(:encryptor) { Backup::Encryptor::OpenSSL.new }
+    let(:encryptor) { SlidayBackup::Encryptor::OpenSSL.new }
 
     before do
       # salt is true by default

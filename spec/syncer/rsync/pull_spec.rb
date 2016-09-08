@@ -2,7 +2,7 @@
 
 require File.expand_path('../../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Syncer::RSync::Pull do
   before do
     Syncer::RSync::Pull.any_instance.

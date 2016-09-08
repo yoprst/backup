@@ -2,7 +2,7 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-module Backup
+module SlidayBackup
 describe Notifier::Campfire do
   let(:model) { Model.new(:test_trigger, 'test label') }
   let(:notifier) { Notifier::Campfire.new(model) }
@@ -59,7 +59,7 @@ describe Notifier::Campfire do
     let(:json_body) {
       JSON.dump(
         :message => {
-          :body => '[Backup::STATUS] test label (test_trigger)',
+          :body => '[SlidayBackup::STATUS] test label (test_trigger)',
           :type => 'Textmessage'
         }
       )

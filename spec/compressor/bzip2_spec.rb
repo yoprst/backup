@@ -2,23 +2,23 @@
 
 require File.expand_path('../../spec_helper.rb', __FILE__)
 
-describe Backup::Compressor::Bzip2 do
+describe SlidayBackup::Compressor::Bzip2 do
   before do
-    Backup::Compressor::Bzip2.any_instance.stubs(:utility).returns('bzip2')
+    SlidayBackup::Compressor::Bzip2.any_instance.stubs(:utility).returns('bzip2')
   end
 
   it 'should be a subclass of Compressor::Base' do
-    Backup::Compressor::Bzip2.
-      superclass.should == Backup::Compressor::Base
+    SlidayBackup::Compressor::Bzip2.
+      superclass.should == SlidayBackup::Compressor::Base
   end
 
   describe '#initialize' do
-    let(:compressor) { Backup::Compressor::Bzip2.new }
+    let(:compressor) { SlidayBackup::Compressor::Bzip2.new }
 
-    after { Backup::Compressor::Bzip2.clear_defaults! }
+    after { SlidayBackup::Compressor::Bzip2.clear_defaults! }
 
     it 'should load pre-configured defaults' do
-      Backup::Compressor::Bzip2.any_instance.expects(:load_defaults!)
+      SlidayBackup::Compressor::Bzip2.any_instance.expects(:load_defaults!)
       compressor
     end
 
@@ -31,7 +31,7 @@ describe Backup::Compressor::Bzip2 do
       end
 
       it 'should use the values given' do
-        compressor = Backup::Compressor::Bzip2.new do |c|
+        compressor = SlidayBackup::Compressor::Bzip2.new do |c|
           c.level = 5
         end
         compressor.level.should == 5
@@ -43,7 +43,7 @@ describe Backup::Compressor::Bzip2 do
 
     context 'when pre-configured defaults have been set' do
       before do
-        Backup::Compressor::Bzip2.defaults do |c|
+        SlidayBackup::Compressor::Bzip2.defaults do |c|
           c.level = 7
         end
       end
@@ -56,7 +56,7 @@ describe Backup::Compressor::Bzip2 do
       end
 
       it 'should override pre-configured defaults' do
-        compressor = Backup::Compressor::Bzip2.new do |c|
+        compressor = SlidayBackup::Compressor::Bzip2.new do |c|
           c.level = 6
         end
         compressor.level.should == 6

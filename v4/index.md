@@ -72,6 +72,7 @@ $ tar -tvf my_backup.tar
 
 You can use any number of the following Storages to store your backup:
 
+- [Sliday  Backup Storage][storage-sliday]
 - [Amazon S3][storage-s3]
 - [Rackspace Cloud Files][storage-cloudfiles]
 - [Ninefold][storage-ninefold]

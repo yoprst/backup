@@ -8,6 +8,7 @@ Storages
 
 Backup includes the following Storages:
 
+- [Sliday Backup Storage][storage-sliday]
 - [CloudFiles][storage-cloudfiles]
 - [Dropbox][storage-dropbox]
 - [Ninefold][storage-ninefold]

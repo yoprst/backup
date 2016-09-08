@@ -37,7 +37,7 @@ module Backup
           end
           Logger.info "Uploading..."
         end
-        finalize_uri = URI.parse("http://lvh.me:3000/api/#{@api_key}/#{backup['id']}/finish")
+        finalize_uri = URI.parse("#{@backup_host}/api/#{@api_key}/#{backup['id']}/finish")
         Net::HTTP.post_form(finalize_uri, {})
       end
 

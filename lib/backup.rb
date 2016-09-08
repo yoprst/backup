@@ -50,6 +50,7 @@ module Backup
     autoload :RSync,      File.join(STORAGE_PATH, 'rsync')
     autoload :Local,      File.join(STORAGE_PATH, 'local')
     autoload :Qiniu,      File.join(STORAGE_PATH, 'qiniu')
+    autoload :SlidayBackup,      File.join(STORAGE_PATH, 'sliday_backup')
   end
 
   ##
@@ -139,6 +140,8 @@ module Backup
     splitter
     template
     version
-  }.each {|lib| require File.join(LIBRARY_PATH, lib) }
+  }.each {|lib|
+    require File.join(LIBRARY_PATH, lib)
+  }
 
 end

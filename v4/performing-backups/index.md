@@ -8,15 +8,15 @@ Performing Backups
 
 The most basic command for performing a backup is:
 
-    $ backup perform --trigger my_backup
+    $ sliday_backup perform --trigger my_backup
 
-This command will load the main configuration file, located by default at `~/Backup/config.rb`, along with all the
+This command will load the main configuration file, located by default at `~/SlidayBackup/config.rb`, along with all the
 models found in the `models/` sub-directory at this location. Therefore, in order for the above command to work, a model
 must exist which defines the `my_backup` trigger.
 
 ``` rb
 Model.new(:my_backup, 'My Backup') do
-  # backup configuration...
+  # sliday_backup configuration...
 end
 ```
 
@@ -30,19 +30,19 @@ Command Line Options
 
 The `--trigger` option specifies which backup model you wish to run.
 
-    $ backup perform --trigger my_backup
-    $ backup perform -t my_backup
+    $ sliday_backup perform --trigger my_backup
+    $ sliday_backup perform -t my_backup
 
 To asynchronously perform multiple models, specify multiple triggers in the order you wish the jobs to run.
 
-    $ backup perform --triggers my_backup_1,my_backup_2,my_backup_3 (no spaces)
+    $ sliday_backup perform --triggers my_backup_1,my_backup_2,my_backup_3 (no spaces)
 
 
 **--config-file** (alias: -c)
 
 Use this option to specify the location of your configuration file.
 
-    $ backup perform --trigger my_backup --config-file /path/to/config.rb
+    $ sliday_backup perform --trigger my_backup --config-file /path/to/config.rb
 
 If not specified, the default location of `~/Backup/config.rb` will be used.
 
@@ -51,10 +51,10 @@ If not specified, the default location of `~/Backup/config.rb` will be used.
 
 Backup has a [Cycling][storages] feature, which can automatically perform backup rotation for you.
 In order to do this, Backup stores YAML formatted data files with information about your backups.
-By default, these files are stored in `~/Backup/.data`. If you are storing this data in another location,
+By default, these files are stored in `~/SlidayBackup/.data`. If you are storing this data in another location,
 it will need to be specified using the `--data-path` option.
 
-    $ backup perform --trigger my_backup --data-path /path/to/data/dir/
+    $ sliday_backup perform --trigger my_backup --data-path /path/to/data/dir/
 
 
 **--tmp-path**
@@ -62,22 +62,22 @@ it will need to be specified using the `--data-path` option.
 During the backup process, all of the Archives and Databases being processed are stored in `~/Backup/.tmp` before being
 transferred to your Storages. If you want to use a different directory for this, use:
 
-    $ backup perform --trigger my_backup --tmp-path /path/to/.tmp/
+    $ sliday_backup perform --trigger my_backup --tmp-path /path/to/.tmp/
 
 
 **--log-path** (alias: -l)
 
 Used to specify the location of Backup's log file. See the [Logging][logging] page for more info.
 
-    $ backup perform --trigger my_backup --log-path /path/to/logs/
+    $ sliday_backup perform --trigger my_backup --log-path /path/to/logs/
 
 
 **--root-path** (alias: -r)
 
 If you are happy with the default directory names, but would like to establish this hierarchy in a location other
-than `~/Backup`, then you can specify a new root directory using:
+than `~/SlidayBackup`, then you can specify a new root directory using:
 
-    $ backup perform --trigger my_backup --root-path /path/to/root/dir/
+    $ sliday_backup perform --trigger my_backup --root-path /path/to/root/dir/
 
 The `--root-path` may be specified as an absolute path, or a relative path from where the `backup` command is being run.
 In either case, the specified directory must exist.
@@ -97,7 +97,7 @@ then it will be used as you supply it. If it is given as a relative path, it wil
 **Examples:**
 
 ```
-$ backup perform --trigger my_backup --root-path /new/root/ --tmp-path /tmp/backup
+$ sliday_backup perform --trigger my_backup --root-path /new/root/ --tmp-path /tmp/backup
 
 --config-file => /new/root/config.rb
 --data-path   => /new/root/.data/
@@ -105,7 +105,7 @@ $ backup perform --trigger my_backup --root-path /new/root/ --tmp-path /tmp/back
 --tmp-path    => /tmp/backup/
 ```
 ```
-$ backup perform --trigger my_backup --root-path /new/root/ --tmp-path temp/dir/ --config-file my_config.rb
+$ sliday_backup perform --trigger my_backup --root-path /new/root/ --tmp-path temp/dir/ --config-file my_config.rb
 
 --config-file => /new/root/my_config.rb
 --data-path   => /new/root/.data/
@@ -116,7 +116,7 @@ $ backup perform --trigger my_backup --root-path /new/root/ --tmp-path temp/dir/
 Given you are running `backup` from the directory `/foo`:
 
 ```
-$ backup perform --trigger my_backup --root-path my_backups --tmp-path temp/dir/
+$ sliday_backup perform --trigger my_backup --root-path my_backups --tmp-path temp/dir/
 
 --config-file => /foo/my_backups/config.rb
 --data-path   => /foo/my_backups/.data/
@@ -124,7 +124,7 @@ $ backup perform --trigger my_backup --root-path my_backups --tmp-path temp/dir/
 --tmp-path    => /foo/my_backups/temp/dir/
 ```
 ```
-$ backup perform --trigger my_backup --root-path . --tmp-path /tmp/backup --config-file cfg_dir/cfg.rb
+$ sliday_backup perform --trigger my_backup --root-path . --tmp-path /tmp/backup --config-file cfg_dir/cfg.rb
 
 --config-file => /foo/cfg_dir/cfg.rb
 --data-path   => /foo/.data/
@@ -140,17 +140,17 @@ The `check` command is used to check your Backup configuration. This command wil
 `config.rb` file, along with all of your _model_ files, and report any Errors or Warnings
 generated. This allows to you check your configuration files for syntax errors, as well as
 detecting other errors or warning such as the use of deprecated configuration settings.
-It is recommended that you run `backup check` whenever you update `backup`.
+It is recommended that you run `sliday_backup check` whenever you update `backup`.
 
-If your `config.rb` file is not in the default location of `~/Backup/config.rb`, use the
+If your `config.rb` file is not in the default location of `~/SlidayBackup/config.rb`, use the
 `--config-file` argument to specify it's location.
 
-    $ backup check --config-file /path/to/config.rb
+    $ sliday_backup check --config-file /path/to/config.rb
 
 As a convenience, this check may also be performed by adding the `--check` option to your
-`backup perform` command, in which case the `trigger` specified will not be performed.
+`sliday_backup perform` command, in which case the `trigger` specified will not be performed.
 
-    $ backup perform --trigger my_backup --check
+    $ sliday_backup perform --trigger my_backup --check
 
 The result of this check will be output to the console only. Any [Logger][logging] configuration
 will be ignored. If the check is successful, this command will exit with status code `0`. If there
@@ -164,12 +164,12 @@ use `perform` to confirm your backup jobs will succeed.
 Exit Status Codes
 -----------------
 
-The `backup perform` command will exit with the following status codes:
+The `sliday_backup perform` command will exit with the following status codes:
 
 **0**: All triggers were successful and no warnings were issued.  
 **1**: All triggers were successful, but some had warnings.  
 **2**: All triggers were _processed_, but some failed.  
-**3**: A fatal error caused Backup to exit. Some triggers may not have been processed.
+**3**: A fatal error caused SlidayBackup to exit. Some triggers may not have been processed.
 
 
 Passing Arbitrary Variables
@@ -179,7 +179,7 @@ If you wish to pass in parameters other then the predefined Command Line Options
 you can do so using environment-variables. For example:
 
     $ DB_NAME=my_app_production STORAGE_PATH=~/backups/production \
-      backup perform --trigger my_backup
+      sliday_backup perform --trigger my_backup
 
 Then, you can access these in the `my_backup.rb` model:
 
@@ -198,7 +198,7 @@ end
 
 Or you can use a single environment-variable to setup a number of local variables:
 
-    $ BACKUP_ENV=production backup perform --trigger my_backup
+    $ BACKUP_ENV=production sliday_backup perform --trigger my_backup
 
 Then, configure your model using:
 

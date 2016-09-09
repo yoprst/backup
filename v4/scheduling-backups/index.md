@@ -26,7 +26,7 @@ $ wheneverize
 
 ``` rb
 every 1.day, :at => '4:30 am' do
-  command "backup perform -t my_backup"
+  command "sliday_backup perform -t my_backup"
 end
 ```
 
@@ -34,7 +34,7 @@ end
 
 ```
 $ whenever
-~ 30 4 * * * /bin/bash -l -c 'backup perform -t my_backup'
+~ 30 4 * * * /bin/bash -l -c 'sliday_backup perform -t my_backup'
 ~
 ~ ## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
 ~ ## [message] Run 'whenever --help' for more options.
@@ -48,7 +48,7 @@ $ whenever --update-crontab
 
 $ crontab -l # to view the crontab entry
 ~ # Begin Whenever generated tasks for: /absolute/path/to/config/schedule.rb
-~ 30 4 * * * /bin/bash -l -c 'backup perform -t my_backup'
+~ 30 4 * * * /bin/bash -l -c 'sliday_backup perform -t my_backup'
 ~
 ~  
 ~ # End Whenever generated tasks for: /absolute/path/to/config/schedule.rb
@@ -71,7 +71,7 @@ $ whenever -f config/schedule.rb -w 'my backup'
 
 $ crontab -l
 ~ # Begin Whenever generated tasks for: my backup
-~ 30 4 * * * /bin/bash -l -c 'backup perform -t my_backup'
+~ 30 4 * * * /bin/bash -l -c 'sliday_backup perform -t my_backup'
 ~
 ~
 ~ # End Whenever generated tasks for: my backup

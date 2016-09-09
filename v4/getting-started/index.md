@@ -15,7 +15,7 @@ Generating Your First Backup Model
 
 Let's generate a simple Backup model file:
 
-    $ backup generate:model --trigger my_backup \
+    $ sliday_backup generate:model --trigger my_backup \
       --archives --storages='local' --compressor='gzip' --notifiers='mail'
 
 (For a full list of options, view the [Generator][generator] Page)
@@ -27,7 +27,7 @@ The above generator will provide us with a backup model file (located in `~/Back
 # Backup Generated: my_backup
 # Once configured, you can run the backup with the following command:
 #
-# $ backup perform -t my_backup [-c <path_to_configuration_file>]
+# $ sliday_backup perform -t my_backup [-c <path_to_configuration_file>]
 #
 # For more information about Backup's components, see the documentation at:
 # http://meskyanichi.github.io/backup
@@ -120,7 +120,7 @@ doesn't exist.
 
 Once you've setup your configuration, check your work with:
 
-    $ backup check
+    $ sliday_backup check
 
 If there are no syntax errors, the check should report:
 
@@ -134,7 +134,7 @@ Performing Your First Backup
 
 Now that you've setup your model, you can run this backup by issuing the following command:
 
-    $ backup perform --trigger my_backup
+    $ sliday_backup perform --trigger my_backup
 
 The `my_backup` refers to the `:my_backup` symbol in:
 

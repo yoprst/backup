@@ -10,12 +10,12 @@ The Backup generator is a very useful little tool to help you set up backups fas
 
 To bring up the `help` screen, run the following command:
 
-    $ backup help generate:model
+    $ sliday_backup help generate:model
 
 It'll display something like this:
 
     Usage:
-      backup generate:model -t, --trigger=TRIGGER
+      sliday_backup generate:model -t, --trigger=TRIGGER
 
     Options:
       -t, --trigger=TRIGGER            # Trigger name for the Backup model
@@ -42,7 +42,7 @@ S3. And finally, you want to be notified by email if there are any problems.
 
 To get up and running quickly, issue the following command:
 
-    $ backup generate:model --trigger my_backup \
+    $ sliday_backup generate:model --trigger my_backup \
         --databases="mongodb, postgresql" --storages="s3" \
         --encryptor="gpg" --compressor="gzip" --notifiers="mail"
 
@@ -50,10 +50,10 @@ This will create a new file: `~/Backup/models/my_backup.rb` (the default locatio
 
 ```rb
 ##
-# Backup Generated: my_backup
+# sliday_backup Generated: my_backup
 # Once configured, you can run the backup with the following command:
 #
-# $ backup perform -t my_backup [-c <path_to_configuration_file>]
+# $ sliday_backup perform -t my_backup [-c <path_to_configuration_file>]
 #
 # For more information about Backup's components, see the documentation at:
 # http://meskyanichi.github.io/backup
@@ -208,14 +208,14 @@ This would create: `/path/to/models/my_backup.rb`.
 Main Configuration File
 -----------------------
 
-Generating the model above will also create the main Backup configuration file if it does not already exist.
-By default, this would be `~/Backup/config.rb`. You may supply the `--config-file` option to specify a different path.
+Generating the model above will also create the main SlidayBackup configuration file if it does not already exist.
+By default, this would be `~/SlidayBackup/config.rb`. You may supply the `--config-file` option to specify a different path.
 This is the first file Backup will load when performing your backup job. This is where you will setup any global
 configuration and component defaults.
 
 ```rb
 ##
-# Backup v4.x Configuration
+# SlidayBackup v0.x Configuration
 #
 # Documentation: http://meskyanichi.github.io/backup
 # Issue Tracker: https://github.com/meskyanichi/backup/issues
@@ -284,7 +284,7 @@ configuration and component defaults.
 # Command line options will override those set here.
 # For example, the following would override the example settings above
 # to disable syslog and enable console output.
-#   backup perform --trigger my_backup --no-syslog --no-quiet
+#   sliday_backup perform --trigger my_backup --no-syslog --no-quiet
 
 ##
 # Component Defaults
@@ -343,13 +343,13 @@ For more information on the `Logger` configuration, see the [Logging][logging] p
 By default, Backup will look for this file in `~/Backup/config.rb`. If you want to place your configuration files in a
 different location, use the `--config-file` option:
 
-    $ backup perform --trigger my_backup --config-file '/path/to/config.rb'
+    $ sliday_backup perform --trigger my_backup --config-file '/path/to/config.rb'
 
 If you relocate this file, be sure to move the `models` directory as well.
 
 If you need to re-generate only a configuration file, you can do so using:
 
-    $ backup generate:config --config-file /path/to/my_config.rb
+    $ sliday_backup generate:config --config-file /path/to/my_config.rb
 
 
 {% include markdown_links %}

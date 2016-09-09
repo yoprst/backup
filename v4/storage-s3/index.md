@@ -49,7 +49,7 @@ end
 
 Each file uploaded using Multipart Uploading can consist of up to 10,000 chunks. If the file being uploaded is too
 large to be divided into 10,000 chunks at the configured `chunk_size`, the `chunk_size` will be automatically
-adjusted and a warning will be logged. To enforce your desired `chunk_size`, you should use the [Splitter][splitter].
+adjusted and a warning will be logged. To enforce your desired `chunk_size`.
 
 For example, with the default `chunk_size` of 5 MiB, the maximum file size would be 5 MiB * 10,000 (52,428,800,000 -
 or ~48.5 GiB). If your final backup package might be larger than this, you should configure the Splitter to

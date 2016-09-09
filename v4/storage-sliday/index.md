@@ -1,6 +1,6 @@
 ---
 layout: main
-title: Storage::SlidayBackup
+title: Storage::SlidayStorage
 ---
 
 Storage::SlidayBackup

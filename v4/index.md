@@ -72,7 +72,7 @@ $ tar -tvf my_backup.tar
 
 You can use any number of the following Storages to store your backup:
 
-- [Sliday  Backup Storage][storage-sliday]
+- [Sliday Backup Storage][storage-sliday]
 - [Amazon S3][storage-s3]
 - [Rackspace Cloud Files][storage-cloudfiles]
 - [Ninefold][storage-ninefold]
@@ -82,12 +82,6 @@ You can use any number of the following Storages to store your backup:
 - [SCP][storage-scp]
 - [RSync][storage-rsync]
 - [Local][storage-local]
-
-All of the above Storages _(except RSync)_ support:
-
-- [Cycling][storages] to keep and rotate multiple copies of your stored backups.
-
-- [Splitter][splitter] to break up a large backup package into smaller files.
 
 
 [Syncers][syncers]

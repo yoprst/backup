@@ -130,20 +130,6 @@ final archive will make it impossible for `rsync` to distinguish changes between
 This will result in the entire backup archive will be transferred, even if only a small change was made to the original
 files.
 
-### Splitter
-
-Using the [Splitter][splitter] with the RSync Storage is not recommended.
-
-If you use the Splitter, understand that the RSync Storage will never remove any files from `path`.
-For example, say your backup usually results in 2 chunk files being stored: `my_backup.tar-aa` and `my_backup.tar-ab`.
-Then one day, it results in 3 chunks for some reason - an additional `my_backup.tar-ac` file.
-You discover a ton of files you meant to delete the next day, and your backup returns to it's normal 2 chunks.
-That 3rd `my_backup.tar-ac` file will remain until you delete it.
-
-Also, changes that alter one file would cause the resulting changes to all subsequent files to be transmitted,
-as unchanged data is shifted to/from these files.
-
-
 ### Cycling
 
 The RSync Storage option _does not_ support cycling, so you cannot specify `server.keep = num_of_backups` here. With

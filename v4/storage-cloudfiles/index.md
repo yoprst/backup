@@ -60,7 +60,7 @@ of this object would be close to 5 GiB (1024^2 x 5 x 1000 = 5,242,880,000 bytes)
 is larger than this, Backup will automatically adjust your `segment_size` to fit the object within the 1,000
 segment limit _and log a warning_.
 
-To control the `segment_size` while allowing for larger backups, you should use the [Splitter][splitter] to split your
+To control the `segment_size` while allowing for larger backups, you should use the Splitter to split your
 final backup package into files based on your `segment_size`. If your `segment_size` is 5 MiB, then you would
 configure the Splitter with `split_into_chunks_of 5000` (segment_size x 1,000).
 

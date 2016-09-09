@@ -18,7 +18,7 @@ nav_v3: [
   ['Component Defaults',        'component-defaults'        ],
   ['Before/After Hooks',        'before-after-hooks'        ],
   ['Scheduling Backups',        'scheduling-backups'        ],
-  ['Splitter',                  'splitter'                  ],
+#  ['Splitter',                  'splitter'                  ],
   [],
   ['Model Components',          '',                         '|'],
     ['Archives',                  'archives',                 'xxx|'],
@@ -63,8 +63,8 @@ nav_v3: [
 
 nav_v4: [
   ['Installation',              'installation'              ],
-  ['Upgrading',                 'upgrading'                 ],
-  ['Release Notes',             'release-notes'             ],
+#  ['Upgrading',                 'upgrading'                 ],
+#  ['Release Notes',             'release-notes'             ],
   [],
   ['Getting Started',           'getting-started'           ],
   ['Generator',                 'generator'                 ],
@@ -75,7 +75,7 @@ nav_v4: [
   ['Component Defaults',        'component-defaults'        ],
   ['Before/After Hooks',        'before-after-hooks'        ],
   ['Scheduling Backups',        'scheduling-backups'        ],
-  ['Splitter',                  'splitter'                  ],
+#  ['Splitter',                  'splitter'                  ],
   [],
   ['Model Components',          '',                         '|'],
     ['Archives',                  'archives',                 'xxx|'],

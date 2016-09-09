@@ -27,7 +27,7 @@ It'll display something like this:
           [--compressor=COMPRESSOR]    # (bzip2, custom, gzip)
           [--notifiers=NOTIFIERS]      # (campfire, hipchat, http_post, mail, nagios, prowl, pushover, twitter)
           [--archives]                 # Model will include tar archives.
-          [--splitter]                 # Add Splitter to the model
+
 
 The options is what makes setting up a Backup configuration file a breeze.
 
@@ -43,7 +43,7 @@ S3. And finally, you want to be notified by email if there are any problems.
 To get up and running quickly, issue the following command:
 
     $ backup generate:model --trigger my_backup \
-        --databases="mongodb, postgresql" --storages="s3" --syncers="s3" \
+        --databases="mongodb, postgresql" --storages="s3" \
         --encryptor="gpg" --compressor="gzip" --notifiers="mail"
 
 This will create a new file: `~/Backup/models/my_backup.rb` (the default location), and the file will look like this:

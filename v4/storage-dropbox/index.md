@@ -53,9 +53,6 @@ store_with Dropbox do |db|
 end
 ```
 
-**Note:** This has nothing to do with Backup's [Splitter][splitter]. If you have a Splitter defined on your _model_
-using `split_into_chunks_of`, your final backup package will still be split into multiple files, and each of those files
-will be uploaded to Dropbox.
 
 
 {% include markdown_links %}

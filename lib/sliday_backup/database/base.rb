@@ -8,7 +8,7 @@ module SlidayBackup
       include Utilities::Helpers
       include Config::Helpers
 
-      attr_reader :model, :database_id, :dump_path
+      attr_reader :model, :database_id, :dump_path, :name
 
       ##
       # If given, +database_id+ will be appended to the #dump_filename.
@@ -18,6 +18,7 @@ module SlidayBackup
         @model = model
         @database_id = database_id.to_s.gsub(/\W/, '_') if database_id
         @dump_path = File.join(Config.tmp_path, model.trigger, 'databases')
+        @name ||= false
         load_defaults!
       end
 
@@ -64,7 +65,7 @@ module SlidayBackup
             end
           end
 
-          self.class.name.split('::').last + (database_id ? "-#{ database_id }" : '')
+          self.class.name.split('::').last + (name ? "-#{ name }" : '') + (database_id ? "-#{ database_id }" : '')
         end
       end
 

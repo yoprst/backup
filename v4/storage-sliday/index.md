@@ -7,7 +7,7 @@ Storage::SlidayBackup
 ==============
 
 ``` rb
-store_with SlidayBackup do |sb|
+store_with SlidayStorage do |sb|
     sb.api_key="PROJECT_API_KEY"
 end
 ```
